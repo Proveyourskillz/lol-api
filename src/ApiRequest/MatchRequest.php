@@ -4,6 +4,8 @@ use Likewinter\LolApi\Mapper\MatchMapper;
 
 class MatchRequest extends AbstractRequest
 {
+    protected $mapperClass = MatchMapper::class;
+
     protected $type = 'match';
     protected $version = 3;
 
@@ -19,7 +21,6 @@ class MatchRequest extends AbstractRequest
     {
         $this->matchId = $matchId;
         $this->region = $region;
-        $this->mapper = new MatchMapper();
     }
 
     public function getSubtypes(): array

@@ -6,6 +6,8 @@ class SummonerRequest extends AbstractRequest
 {
     const CREDENTIAL_TYPES = ['account', 'name', 'summoner'];
 
+    protected $mapperClass = SummonerMapper::class;
+
     protected $type = 'summoner';
     protected $version = 3;
 
@@ -19,27 +21,26 @@ class SummonerRequest extends AbstractRequest
      * @param mixed $value
      * @param string $region
      */
-    public function __construct(string $credential, $value, string $region)
+    public function __construct(string $region, string $credential, $value)
     {
         $this->credential = static::validateCredential($credential);
         $this->value = $value;
         $this->region = $region;
-        $this->mapper = new SummonerMapper();
     }
 
-    public static function byAccountId(int $accountId, string $region)
+    public static function byAccountId(string $region, int $accountId)
     {
-        return new static('account', $accountId, $region);
+        return new static($region, 'account', $accountId);
     }
 
-    public static function byName(string $name, string $region)
+    public static function byName(string $region, string $name)
     {
-        return new static('name', $name, $region);
+        return new static($region, 'name', $name);
     }
 
-    public static function bySummonerId(int $summonerId, string $region)
+    public static function bySummonerId(string $region, int $summonerId)
     {
-        return new static('summoner', $summonerId, $region);
+        return new static($region, 'summoner', $summonerId);
     }
 
     public function getSubtypes(): array

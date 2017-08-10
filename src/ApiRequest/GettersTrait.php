@@ -20,11 +20,6 @@ trait GettersTrait
         return $this->version;
     }
 
-    public function getQuery(): ?array
-    {
-        return $this->query;
-    }
-
     public function getPlatform(): ?string
     {
         return Api::REGIONS_PLATFORMS[$this->region] ?? null;
@@ -37,6 +32,10 @@ trait GettersTrait
 
     public function getMapper(): MapperInterface
     {
+        if (!$this->mapper) {
+            $this->mapper = new $this->mapperClass;
+        }
+
         return $this->mapper;
     }
 }

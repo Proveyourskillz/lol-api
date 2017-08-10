@@ -1,7 +1,5 @@
 <?php namespace Likewinter\LolApi\Models;
 
-use Likewinter\LolApi\ApiRequest\MatchRequest;
-
 class MatchReferenceModel extends AbstractModel
 {
     /**

@@ -42,11 +42,22 @@ class SummonerModel extends AbstractModel
 
     public function getMatchListRequest(): MatchListRequest
     {
-        return new MatchListRequest($this->accountId, [], $this->region);
+        return new MatchListRequest($this->region, $this->accountId);
     }
 
     public function recentMatches(): MatchListModel
     {
-        return $this->getApi()->request($this->getMatchListRequest());
+        return $this->getApi()->makeMatchList($this->getMatchListRequest());
+    }
+
+    public function matches(array $query): MatchListModel
+    {
+        return $this
+            ->getApi()
+            ->makeMatchList(
+                $this
+                    ->getMatchListRequest()
+                    ->setQuery($query)
+            );
     }
 }

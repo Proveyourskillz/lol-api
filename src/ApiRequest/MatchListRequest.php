@@ -2,10 +2,11 @@
 
 use Likewinter\LolApi\Mapper\MatchListMapper;
 
-class MatchListRequest extends AbstractRequest
+class MatchListRequest extends AbstractRequest implements ApiQueryRequestInterface
 {
     use QueryParamsTrait;
 
+    protected $mapperClass = MatchListMapper::class;
     protected static $queryParams = [
         'queue',
         'beginTime',
@@ -28,12 +29,11 @@ class MatchListRequest extends AbstractRequest
      * @param array $query
      * @param string $region
      */
-    public function __construct(int $accountId, array $query = [], string $region = null)
+    public function __construct(string $region, int $accountId, array $query = [])
     {
-        $this->accountId = $accountId;
         $this->region = $region;
-        $this->mapper = new MatchListMapper();
-        $this->setQuery($query);
+        $this->accountId = $accountId;
+        $this->query = $this->filterQuery($query);
     }
 
     public function getSubtypes(): array

@@ -3,10 +3,17 @@
 use DusanKasan\Knapsack\Collection;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Uri;
-use Likewinter\LolApi\Models\ModelInterface;
 use Psr\Http\Message\ResponseInterface;
 
 use Likewinter\LolApi\ApiRequest\ApiRequestInterface;
+use Likewinter\LolApi\ApiRequest\ApiQueryRequestInterface;
+use Likewinter\LolApi\ApiRequest\MatchListRequest;
+use Likewinter\LolApi\ApiRequest\MatchRequest;
+use Likewinter\LolApi\ApiRequest\SummonerRequest;
+use Likewinter\LolApi\Models\MatchListModel;
+use Likewinter\LolApi\Models\MatchModel;
+use Likewinter\LolApi\Models\SummonerModel;
+use Likewinter\LolApi\Models\ModelInterface;
 
 class Api
 {
@@ -73,12 +80,12 @@ class Api
         $this->endpointURI = new Uri('https:');
     }
 
-    public function request(ApiRequestInterface $apiRequest): ModelInterface
+    public function make(ApiRequestInterface $apiRequest): ModelInterface
     {
         $uri = $this->getUriForRequest($apiRequest);
         $options = [];
-        if ($query = $apiRequest->getQuery()) {
-            $options['query'] = $query;
+        if ($apiRequest instanceof ApiQueryRequestInterface) {
+            $options['query'] = $apiRequest->getQuery();
         }
         $response = $this->http->get($uri, $options);
         $this->setRateLimits($response);
@@ -89,6 +96,36 @@ class Api
             ->getMapper()
             ->map($data)
             ->wireApi($this);
+    }
+
+    public function makeSummoner(SummonerRequest $summonerRequest): SummonerModel
+    {
+        $summoner = $this->make($summonerRequest);
+        if (!$summoner instanceof SummonerModel) {
+            throw new \Exception('');
+        }
+
+        return $summoner;
+    }
+
+    public function makeMatchList(MatchListRequest $matchListRequest): MatchListModel
+    {
+        $matchList = $this->make($matchListRequest);
+        if (!$matchList instanceof MatchListModel) {
+            throw new \Exception('');
+        }
+
+        return $matchList;
+    }
+
+    public function makeMatch(MatchRequest $matchRequest): MatchModel
+    {
+        $match = $this->make($matchRequest);
+        if (!$match instanceof MatchModel) {
+            throw new \Exception('');
+        }
+
+        return $match;
     }
 
     public function getRateLimits(): array

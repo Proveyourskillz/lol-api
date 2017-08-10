@@ -4,9 +4,27 @@ use DusanKasan\Knapsack\Collection;
 
 trait QueryParamsTrait
 {
-    protected function setQuery(array $query): void
+    /**
+     * Array with additional query parameters for API call
+     * @var array
+     */
+    protected $query = [];
+
+    public function getQuery(): array
     {
-        $this->query = Collection::from($query)
+        return $this->query ?? [];
+    }
+
+    public function setQuery(array $query): self
+    {
+        $this->query = $this->filterQuery($query);
+
+        return $this;
+    }
+
+    public function filterQuery(array $query): array
+    {
+        return Collection::from($query)
             ->only(static::$queryParams)
             ->toArray();
     }

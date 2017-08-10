@@ -1,19 +1,18 @@
 <?php
 require __DIR__ . './../vendor/autoload.php';
 
-const API_KEY = '>>>>ENTER-YOUR-KEY-HERE';
+const API_KEY = 'API_KEY_HERE';
 
 use Likewinter\LolApi\ApiRequest\SummonerRequest;
-use Likewinter\LolApi\Models\SummonerModel;
 
 $api = new Likewinter\LolApi\Api(API_KEY);
 
-/** @var SummonerModel $summoner */
-$summoner = $api->request(SummonerRequest::bySummonerId(19196451, 'EUW'));
-$matchList = $summoner->recentMatches();
+$summoner = $api->makeSummoner(SummonerRequest::bySummonerId('EUW', 19196451));
+$matchList = $summoner->matches([
+    'beginIndex' => 0,
+    'endIndex' => 1,
+]);
 
-foreach ($matchList->matches as $match) {
-    echo 'date: ' . date('d-m-Y H:i', $match->timestamp / 1000) . ' UTC,'
-        . 'gameId: ' . $match->gameId . ', '
-        . 'role: '. $match->role . "\n";
-}
+$match = $matchList->matchByNumber(0);
+
+echo $match->gameId . $match->gameType . $match->gameMode;

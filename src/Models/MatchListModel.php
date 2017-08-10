@@ -28,14 +28,18 @@ class MatchListModel extends AbstractModel
 
     public function match(MatchReferenceModel $matchReferenceModel): MatchModel
     {
-        return $this->getApi()->request($this->getMatchRequest($matchReferenceModel));
+        return $this
+            ->getApi()
+            ->makeMatch(
+                $this->getMatchRequest($matchReferenceModel)
+            );
     }
 
     public function matchByNumber(int $number): MatchModel
     {
         return $this
             ->getApi()
-            ->request(
+            ->makeMatch(
                 $this->getMatchRequest(
                     $this->matches[$number]
                 )

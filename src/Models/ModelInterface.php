@@ -5,5 +5,5 @@ use Likewinter\LolApi\Api;
 interface ModelInterface
 {
     public function getApi(): Api;
-    public function wireApi(Api $api): ModelInterface;
+    public function wireApi(Api $api): self;
 }

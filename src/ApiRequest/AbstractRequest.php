@@ -5,11 +5,11 @@ use Likewinter\LolApi\Mapper\MapperInterface;
 abstract class AbstractRequest implements ApiRequestInterface
 {
     use GettersTrait;
-    /**
-     * Array with additional query parameters for API call
-     * @var array
+    /*
+     * Name of mapper class
+     * @var string
      */
-    protected $query;
+    protected $mapperClass;
     /**
      * Data to object mapper class name
      * @var MapperInterface
