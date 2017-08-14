@@ -17,7 +17,7 @@ class MatchRequest extends AbstractRequest
      * @param $matchId
      * @param $region
      */
-    public function __construct(int $matchId, string $region)
+    public function __construct(string $region, int $matchId)
     {
         $this->matchId = $matchId;
         $this->region = $region;

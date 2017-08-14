@@ -23,7 +23,7 @@ class MatchListModel extends AbstractModel
 
     public function getMatchRequest(MatchReferenceModel $matchReferenceModel): MatchRequest
     {
-        return new MatchRequest($matchReferenceModel->gameId, $this->region);
+        return new MatchRequest($this->region, $matchReferenceModel->gameId);
     }
 
     public function match(MatchReferenceModel $matchReferenceModel): MatchModel
