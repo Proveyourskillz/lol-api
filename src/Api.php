@@ -2,7 +2,10 @@
 
 use DusanKasan\Knapsack\Collection;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Uri;
+use Likewinter\LolApi\Exceptions\WrongRequestException;
 use Psr\Http\Message\ResponseInterface;
 
 use Likewinter\LolApi\ApiRequest\ApiRequestInterface;
@@ -10,6 +13,8 @@ use Likewinter\LolApi\ApiRequest\ApiQueryRequestInterface;
 use Likewinter\LolApi\ApiRequest\MatchListRequest;
 use Likewinter\LolApi\ApiRequest\MatchRequest;
 use Likewinter\LolApi\ApiRequest\SummonerRequest;
+use Likewinter\LolApi\Exceptions\Handler;
+use Likewinter\LolApi\Exceptions\HandlerInterface;
 use Likewinter\LolApi\Models\MatchListModel;
 use Likewinter\LolApi\Models\MatchModel;
 use Likewinter\LolApi\Models\SummonerModel;
@@ -67,6 +72,10 @@ class Api
      * @var Uri
      */
     private $endpointURI;
+    /**
+     * @var HandlerInterface
+     */
+    private $exceptionHandler;
 
     /**
      * Api constructor.
@@ -78,6 +87,7 @@ class Api
         $this->apiKey = $apiKey;
         $this->http = $this->setupHttpClient();
         $this->endpointURI = new Uri('https:');
+        $this->exceptionHandler = new Handler();
     }
 
     public function make(ApiRequestInterface $apiRequest): ModelInterface
@@ -87,22 +97,27 @@ class Api
         if ($apiRequest instanceof ApiQueryRequestInterface) {
             $options['query'] = $apiRequest->getQuery();
         }
-        $response = $this->http->get($uri, $options);
-        $this->setRateLimits($response);
-        $data = \GuzzleHttp\json_decode($response->getBody());
-        $data->region = $apiRequest->getRegion();
+        try {
+            $response = $this->http->get($uri, $options);
+            $data = \GuzzleHttp\json_decode($response->getBody());
+            $data->region = $apiRequest->getRegion();
+            $this->setRateLimits($response);
 
-        return $apiRequest
-            ->getMapper()
-            ->map($data)
-            ->wireApi($this);
+            return $apiRequest
+                ->getMapper()
+                ->map($data)
+                ->wireApi($this);
+        } catch (RequestException $requestException) {
+            $this->exceptionHandler->handle($requestException, $apiRequest);
+        }
     }
 
     public function makeSummoner(SummonerRequest $summonerRequest): SummonerModel
     {
         $summoner = $this->make($summonerRequest);
         if (!$summoner instanceof SummonerModel) {
-            throw new \Exception('');
+            throw (new WrongRequestException())
+                ->setMethodAndRequest('makeSummoner', 'SummonerRequest');
         }
 
         return $summoner;
@@ -112,7 +127,8 @@ class Api
     {
         $matchList = $this->make($matchListRequest);
         if (!$matchList instanceof MatchListModel) {
-            throw new \Exception('');
+            throw (new WrongRequestException())
+                ->setMethodAndRequest('makeMatchList', 'MatchListRequest');
         }
 
         return $matchList;
@@ -122,7 +138,8 @@ class Api
     {
         $match = $this->make($matchRequest);
         if (!$match instanceof MatchModel) {
-            throw new \Exception('');
+            throw (new WrongRequestException())
+                ->setMethodAndRequest('makeMatch', 'MatchRequest');
         }
 
         return $match;

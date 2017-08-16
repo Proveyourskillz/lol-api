@@ -73,7 +73,7 @@ class SummonerRequest extends AbstractRequest
     private static function validateCredential(string $credential)
     {
         if (!in_array($credential, static::CREDENTIAL_TYPES, true)) {
-            throw \Exception('The credential must be of type ' . implode(', ', static::CREDENTIAL_TYPES));
+            throw new \InvalidArgumentException('The credential must be of type ' . implode(', ', static::CREDENTIAL_TYPES));
         }
 
         return $credential;
