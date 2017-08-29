@@ -5,7 +5,9 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Uri;
+use Likewinter\LolApi\ApiRequest\LeaguePositionRequest;
 use Likewinter\LolApi\Exceptions\WrongRequestException;
+use Likewinter\LolApi\Models\LeaguePositionModel;
 use Psr\Http\Message\ResponseInterface;
 
 use Likewinter\LolApi\ApiRequest\ApiRequestInterface;
@@ -144,6 +146,19 @@ class Api
 
         return $match;
     }
+
+    public function makeLeague (LeaguePositionRequest $leaguePositionRequest): LeaguePositionModel
+    {
+        $league = $this->make($leaguePositionRequest);
+        if (!$league instanceof LeaguePositionModel) {
+            throw (new WrongRequestException())
+                ->setMethodAndRequest('makeLeague', 'LeaguePositionRequest');
+        }
+
+        return $league;
+    }
+
+
 
     public function getRateLimits(): array
     {

@@ -23,6 +23,11 @@ class MatchRequest extends AbstractRequest
         $this->region = $region;
     }
 
+    public static function byMatchId(string $region, int $matchId)
+    {
+        return new static($region, $matchId);
+    }
+
     public function getSubtypes(): array
     {
         return [
