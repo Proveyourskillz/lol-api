@@ -1,6 +1,7 @@
 <?php namespace Likewinter\LolApi\Models;
 
 use Likewinter\LolApi\Api;
+use Likewinter\LolApi\Exceptions\NonApiModel;
 
 abstract class AbstractModel implements ModelInterface
 {
@@ -14,6 +15,13 @@ abstract class AbstractModel implements ModelInterface
      */
     private $wiredApi;
 
+    public function wireRegion(string $region): ModelInterface
+    {
+        $this->region = $region;
+
+        return $this;
+    }
+
     public function wireApi(Api $api): ModelInterface
     {
         $this->wiredApi = $api;
@@ -26,7 +34,7 @@ abstract class AbstractModel implements ModelInterface
         if ($this->wiredApi) {
             return $this->wiredApi;
         } else {
-            throw new \Exception('Model was not instantiated by API Request');
+            throw new NonApiModel('Model was not instantiated by API Request');
         }
     }
 }

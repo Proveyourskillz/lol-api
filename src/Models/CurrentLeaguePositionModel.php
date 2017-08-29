@@ -1,17 +1,7 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: pilot
- * Date: 8/23/17
- * Time: 11:19 PM
- */
-
-namespace Likewinter\LolApi\Models;
-
+<?php namespace Likewinter\LolApi\Models;
 
 class CurrentLeaguePositionModel extends AbstractModel
 {
-
     /**
      * @var string
      */
@@ -64,5 +54,4 @@ class CurrentLeaguePositionModel extends AbstractModel
      * @var int
      */
     public $leaguePoints;
-
 }

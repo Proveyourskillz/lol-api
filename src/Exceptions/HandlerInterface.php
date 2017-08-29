@@ -8,6 +8,7 @@ interface HandlerInterface
     /**
      * @param RequestException $requestException
      * @param ApiRequestInterface $apiRequest
+     * @throws \Exception
      */
     public function handle(RequestException $requestException, ApiRequestInterface $apiRequest): void;
 }

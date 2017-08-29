@@ -3,24 +3,23 @@
 use DusanKasan\Knapsack\Collection;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Uri;
-use Likewinter\LolApi\ApiRequest\LeaguePositionRequest;
-use Likewinter\LolApi\Exceptions\WrongRequestException;
-use Likewinter\LolApi\Models\LeaguePositionModel;
 use Psr\Http\Message\ResponseInterface;
 
-use Likewinter\LolApi\ApiRequest\ApiRequestInterface;
 use Likewinter\LolApi\ApiRequest\ApiQueryRequestInterface;
+use Likewinter\LolApi\ApiRequest\ApiRequestInterface;
+use Likewinter\LolApi\ApiRequest\LeaguePositionRequest;
 use Likewinter\LolApi\ApiRequest\MatchListRequest;
 use Likewinter\LolApi\ApiRequest\MatchRequest;
 use Likewinter\LolApi\ApiRequest\SummonerRequest;
 use Likewinter\LolApi\Exceptions\Handler;
 use Likewinter\LolApi\Exceptions\HandlerInterface;
+use Likewinter\LolApi\Exceptions\WrongRequestException;
+use Likewinter\LolApi\Models\LeaguePositionModel;
 use Likewinter\LolApi\Models\MatchListModel;
 use Likewinter\LolApi\Models\MatchModel;
-use Likewinter\LolApi\Models\SummonerModel;
 use Likewinter\LolApi\Models\ModelInterface;
+use Likewinter\LolApi\Models\SummonerModel;
 
 class Api
 {
@@ -101,13 +100,12 @@ class Api
         }
         try {
             $response = $this->http->get($uri, $options);
-            $data = \GuzzleHttp\json_decode($response->getBody());
-            $data->region = $apiRequest->getRegion();
             $this->setRateLimits($response);
 
             return $apiRequest
                 ->getMapper()
-                ->map($data)
+                ->map(\GuzzleHttp\json_decode($response->getBody()))
+                ->wireRegion($apiRequest->getRegion())
                 ->wireApi($this);
         } catch (RequestException $requestException) {
             $this->exceptionHandler->handle($requestException, $apiRequest);
@@ -147,7 +145,7 @@ class Api
         return $match;
     }
 
-    public function makeLeague (LeaguePositionRequest $leaguePositionRequest): LeaguePositionModel
+    public function makeLeague(LeaguePositionRequest $leaguePositionRequest): LeaguePositionModel
     {
         $league = $this->make($leaguePositionRequest);
         if (!$league instanceof LeaguePositionModel) {
@@ -157,8 +155,6 @@ class Api
 
         return $league;
     }
-
-
 
     public function getRateLimits(): array
     {
@@ -182,8 +178,8 @@ class Api
                 foreach (explode(',', $value[0]) as $limit) {
                     [$requests, $seconds] = explode(':', $limit);
                     $limits[self::RATE_LIMITS_TYPE[$name]][] = [
-                        'requests' => (int) $requests,
-                        'seconds' => (int) $seconds,
+                        'requests' => (int)$requests,
+                        'seconds' => (int)$seconds,
                     ];
                 }
 

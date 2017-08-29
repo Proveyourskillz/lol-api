@@ -10,7 +10,6 @@ class LeaguePositionRequest extends AbstractRequest implements ApiRequestInterfa
     protected $version = 3;
 
     protected $summonerId;
-    protected $region;
 
     /**
      * MatchRequest constructor.
@@ -29,11 +28,8 @@ class LeaguePositionRequest extends AbstractRequest implements ApiRequestInterfa
         return new static($region, $summonerId);
     }
 
-
     public function getSubtypes(): array
     {
         return ['positions/by-summoner' => $this->summonerId];
     }
-
-
 }
