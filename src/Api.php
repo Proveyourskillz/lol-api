@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use Likewinter\LolApi\ApiRequest\ApiQueryRequestInterface;
 use Likewinter\LolApi\ApiRequest\ApiRequestInterface;
 use Likewinter\LolApi\ApiRequest\LeaguePositionRequest;
+use Likewinter\LolApi\ApiRequest\LeagueRequest;
 use Likewinter\LolApi\ApiRequest\MatchListRequest;
 use Likewinter\LolApi\ApiRequest\MatchRequest;
 use Likewinter\LolApi\ApiRequest\SummonerRequest;
@@ -20,6 +21,7 @@ use Likewinter\LolApi\Models\MatchListModel;
 use Likewinter\LolApi\Models\MatchModel;
 use Likewinter\LolApi\Models\ModelInterface;
 use Likewinter\LolApi\Models\SummonerModel;
+use Likewinter\LolApi\Models\LeagueModel;
 
 class Api
 {
@@ -145,12 +147,23 @@ class Api
         return $match;
     }
 
-    public function makeLeague(LeaguePositionRequest $leaguePositionRequest): LeaguePositionModel
+    public function makePositionLeague(LeaguePositionRequest $leaguePositionRequest): LeaguePositionModel
     {
         $league = $this->make($leaguePositionRequest);
         if (!$league instanceof LeaguePositionModel) {
             throw (new WrongRequestException())
-                ->setMethodAndRequest('makeLeague', 'LeaguePositionRequest');
+                ->setMethodAndRequest('makePositionLeague', 'LeaguePositionRequest');
+        }
+
+        return $league;
+    }
+
+    public function makeLeague(LeagueRequest $leagueRequest): LeagueModel
+    {
+        $league = $this->make($leagueRequest);
+        if (!$league instanceof LeagueModel) {
+            throw (new WrongRequestException())
+                ->setMethodAndRequest('makeLeague', 'LeagueRequest');
         }
 
         return $league;

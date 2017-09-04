@@ -54,6 +54,50 @@ $matches = $api->makeMatchList(
 )
 ```
 
+### Leagues
+
+Leagues and Positions of summoner by Summoner Id
+
+```php
+$leaguesPositions = $api->makePositionLeague(
+	new LeaguePositionRequest::bySummonerId($region, $summonerId)
+)
+```
+
+Leagues and Positions of summoner via Summoner object
+
+```php
+$summoner = $api->makeSummoner(
+    SummonerRequest::bySummonerId($region, $summonerId)
+);
+$leaguesPositions = $summoner->leaguesPositions();
+
+```
+
+Leagues by Summoner Id
+
+```php
+$leagues = $api->makeLeague(
+	new LeagueRequest::bySummonerId($region, $summonerId)
+)
+```
+
+### Match
+Match by Match Id
+
+```php
+$matches = $api->makeMatch(
+	new MatchRequest::byMatchId($region, $matchId)
+)
+```
+
+Match by Tournament Code and Match Id
+
+```php
+$matches = $api->makeMatch(
+	new MatchRequest::TournamentCodeMatchId($region, $matchId, $tournamentId)
+)
+```
 
 For more information see [Match API reference](https://developer.riotgames.com/api-methods/#match-v3)
 ## Contributing
@@ -69,7 +113,6 @@ For more information see [Match API reference](https://developer.riotgames.com/a
 Alpha version
 
 ## Credits
-
 Anton Orlov <anton@proveyourskillz.com>
 
 ## License

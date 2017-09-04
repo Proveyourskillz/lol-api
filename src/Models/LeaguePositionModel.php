@@ -3,7 +3,7 @@
 class LeaguePositionModel extends AbstractModel
 {
     /**
-     * List of CurrentLeaguePositionModel items
+     * Set of CurrentLeaguePositionModel items
      * @var CurrentLeaguePositionModel[]
      */
     public $leaguesPlayed;

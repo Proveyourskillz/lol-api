@@ -59,7 +59,7 @@ class SummonerModel extends AbstractModel
 
     public function leaguesPositions(): LeaguePositionModel
     {
-        return $this->getApi()->makeLeague($this->getLeaguePositionRequest());
+        return $this->getApi()->makePositionLeague($this->getLeaguePositionRequest());
     }
 
 
