@@ -26,14 +26,8 @@ $summonerById = $api->makeSummoner(
 You can request it by name and accountId according the example above
 For more information see [Summoner API reference](https://developer.riotgames.com/api-methods/#summoner-v3)
 
-### Matches
-Full match information
+### Matchlist
 
-```php
-$match = $api->makeMatch(
-	new MatchRequest($region, $matchId)
-)
-```
 
 Recent match list
 
