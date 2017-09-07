@@ -19,35 +19,75 @@ You can find examples of usage in `examples` dir
 $api = new Likewinter\LolApi\Api(API_KEY);
 ```
 ### Summoner
+There are several ways to get Summoner: by account id, summoner id or by name
+
 ```php
+$summoner = $api->makeSummoner(
+    new SummonerRequest($region, $typeName, $typeValue)
+);
+// Or you can use static shorthand methods
 $summonerById = $api->makeSummoner(
-	SummonerRequest::bySummonerId($region, $summonerId)
-)
+    SummonerRequest::bySummonerId($region, $summonerId)
+);
+$summonerByAccount = $api->makeSummoner(
+    SummonerRequest::byAccountId($region, $accountId)
+);
+$summonerByName = $api->makeSummoner(
+    SummonerRequest::byName($region, $name)
+);
 ```
-You can request it by name and accountId according the example above
+
 For more information see [Summoner API reference](https://developer.riotgames.com/api-methods/#summoner-v3)
 
-### Matchlist
-
+### Match List
 
 Recent match list
 
 ```php
 $matches = $api->makeMatchList(
-	new MatchListRequest($region, $accountId)
-)
+    new MatchListRequest($region, $accountId)
+);
 ```
 
 Using query (e.g. one last match)
 
 ```php
 $matches = $api->makeMatchList(
-	new MatchListRequest($region, $accountId, [
-	   'beginIndex' => 0,
-   		'endIndex' => 1,
-	]
-)
+    new MatchListRequest($region, $accountId, [
+        'beginIndex' => 0,
+        'endIndex' => 1,
+    ]
+);
 ```
+
+Or using fluent setters
+
+```php
+$matches = $api->makeMatchList(
+    (new MatchListRequest($region, $accountId))
+        ->fromDate(new DateTime('-24 hours'))
+        ->toDate(new DateTime('now'));
+);
+```
+
+### Match
+Match by Id
+
+```php
+$match = $api->makeMatch(
+    new MatchRequest($region, $matchId)
+);
+```
+
+Match within Tournament
+
+```php
+$match = $api->makeMatch(
+    (new MatchRequest($region, $matchId))
+        ->withinTournament($tournamentId)
+);
+```
+For more information see [Match API reference](https://developer.riotgames.com/api-methods/#match-v3)
 
 ### Leagues
 
@@ -55,8 +95,8 @@ Leagues and Positions of summoner by Summoner Id
 
 ```php
 $leaguesPositions = $api->makePositionLeague(
-	new LeaguePositionRequest($region, $summonerId)
-)
+    new LeaguePositionRequest($region, $summonerId)
+);
 ```
 
 Leagues and Positions of summoner via Summoner object
@@ -72,29 +112,10 @@ Leagues by Summoner Id
 
 ```php
 $leagues = $api->makeLeague(
-	new LeagueRequest($region, $summonerId)
-)
+    new LeagueRequest($region, $summonerId)
+);
 ```
 
-### Match
-Match by Match Id
-
-```php
-$matches = $api->makeMatch(
-	new MatchRequest($region, $matchId)
-)
-```
-
-Match by Tournament Code and Match Id
-
-```php
-$matches = $api->makeMatch(
-	new MatchRequest($region, $matchId)
-		->withinTournament($tournamentId)
-)
-```
-
-For more information see [Match API reference](https://developer.riotgames.com/api-methods/#match-v3)
 ## Contributing
 
 1. Fork it!
