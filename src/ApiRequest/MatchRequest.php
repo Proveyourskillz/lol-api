@@ -15,37 +15,35 @@ class MatchRequest extends AbstractRequest
     /**
      * MatchRequest constructor.
      *
-     * @param $matchId
-     * @param $region
+     * @param string $region
+     * @param int $matchId
+     * @param int|null $tournamentId
      */
-    public function __construct(string $region, int $matchId, int $tournamentId)
+    public function __construct(string $region, int $matchId, ?int $tournamentId = null)
     {
         $this->matchId = $matchId;
         $this->region = $region;
         $this->tournamentId = $tournamentId;
     }
 
-    public static function byMatchId(string $region, int $matchId)
-    {
-        return new static($region, $matchId, 0);
-    }
-
-    public static function byTournamentCodeMatchId(string $region, int $matchId, int $tournamentId)
-    {
-        return new static($region, $matchId, $tournamentId);
-    }
-
     public function getSubtypes(): array
     {
-        if($this->tournamentId === 0){
+        if ($this->tournamentId === null) {
             return [
-                'matches' => $this->matchId
-            ];
-        } elseif($this->matchId!=0) {
-            return [
-                'matches/'.(string)$this->matchId.'/by-tournament-code' => $this->tournamentId
+                'matches' => $this->matchId,
             ];
         }
 
+        return [
+            'matches' => $this->matchId,
+            'by-tournament-code' => $this->tournamentId,
+        ];
+    }
+
+    public function withinTournament(int $tournamentId): self
+    {
+        $this->tournamentId = $tournamentId;
+
+        return $this;
     }
 }

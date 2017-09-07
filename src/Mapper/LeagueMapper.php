@@ -1,12 +1,4 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: pilot
- * Date: 8/31/17
- * Time: 2:21 PM
- */
-
-namespace Likewinter\LolApi\Mapper;
+<?php namespace Likewinter\LolApi\Mapper;
 
 use Likewinter\LolApi\Models\LeagueListModel;
 use Likewinter\LolApi\Models\LeagueModel;
@@ -19,7 +11,7 @@ class LeagueMapper extends AbstractMapper
     public function map($data): ModelInterface
     {
         $leagueModel = new LeagueModel;
-        $leagueModel->leaguesPlayed = $this->mapper->mapArray(
+        $leagueModel->leagueList = $this->mapper->mapArray(
             $data,
             [],
             LeagueListModel::class

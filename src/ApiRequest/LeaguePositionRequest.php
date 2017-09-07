@@ -23,11 +23,6 @@ class LeaguePositionRequest extends AbstractRequest implements ApiRequestInterfa
         $this->region = $region;
     }
 
-    public static function bySummonerId(string $region, int $summonerId)
-    {
-        return new static($region, $summonerId);
-    }
-
     public function getSubtypes(): array
     {
         return ['positions/by-summoner' => $this->summonerId];

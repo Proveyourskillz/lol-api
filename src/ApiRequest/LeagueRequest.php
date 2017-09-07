@@ -1,12 +1,5 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: pilot
- * Date: 8/31/17
- * Time: 2:11 PM
- */
+<?php namespace Likewinter\LolApi\ApiRequest;
 
-namespace Likewinter\LolApi\ApiRequest;
 use Likewinter\LolApi\Mapper\LeagueMapper;
 
 class LeagueRequest extends AbstractRequest implements ApiRequestInterface
@@ -28,11 +21,6 @@ class LeagueRequest extends AbstractRequest implements ApiRequestInterface
     {
         $this->summonerId = $summonerId;
         $this->region = $region;
-    }
-
-    public static function bySummonerId(string $region, int $summonerId)
-    {
-        return new static($region, $summonerId);
     }
 
     public function getSubtypes(): array

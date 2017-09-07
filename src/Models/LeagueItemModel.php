@@ -1,12 +1,4 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: pilot
- * Date: 8/31/17
- * Time: 3:45 PM
- */
-
-namespace Likewinter\LolApi\Models;
+<?php namespace Likewinter\LolApi\Models;
 
 
 class LeagueItemModel

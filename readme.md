@@ -4,6 +4,7 @@ Dead simple wrapper of Riot Games API (LoL)
 
 ## Requirements
 * PHP 7.1
+* works better with ext-curl installed
 
 ## Installation
 
@@ -54,7 +55,7 @@ Leagues and Positions of summoner by Summoner Id
 
 ```php
 $leaguesPositions = $api->makePositionLeague(
-	new LeaguePositionRequest::bySummonerId($region, $summonerId)
+	new LeaguePositionRequest($region, $summonerId)
 )
 ```
 
@@ -65,14 +66,13 @@ $summoner = $api->makeSummoner(
     SummonerRequest::bySummonerId($region, $summonerId)
 );
 $leaguesPositions = $summoner->leaguesPositions();
-
 ```
 
 Leagues by Summoner Id
 
 ```php
 $leagues = $api->makeLeague(
-	new LeagueRequest::bySummonerId($region, $summonerId)
+	new LeagueRequest($region, $summonerId)
 )
 ```
 
@@ -81,7 +81,7 @@ Match by Match Id
 
 ```php
 $matches = $api->makeMatch(
-	new MatchRequest::byMatchId($region, $matchId)
+	new MatchRequest($region, $matchId)
 )
 ```
 
@@ -89,7 +89,8 @@ Match by Tournament Code and Match Id
 
 ```php
 $matches = $api->makeMatch(
-	new MatchRequest::TournamentCodeMatchId($region, $matchId, $tournamentId)
+	new MatchRequest($region, $matchId)
+		->withinTournament($tournamentId)
 )
 ```
 
@@ -107,8 +108,9 @@ For more information see [Match API reference](https://developer.riotgames.com/a
 Alpha version
 
 ## Credits
-Anton Orlov <anton@proveyourskillz.com>
+- Anton Orlov <anton@proveyourskillz.com>
+- Pavel Dudko <pavel@proveyourskillz.com>
 
 ## License
 
-MIT
+MIT 

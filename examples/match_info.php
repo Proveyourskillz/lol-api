@@ -1,14 +1,14 @@
 <?php
 require __DIR__ . './../vendor/autoload.php';
-
-const API_KEY = 'API_KEY_HERE';
+$API_KEY = require __DIR__ . '/key.php';
 
 use Likewinter\LolApi\ApiRequest\MatchRequest;
 
-$api = new Likewinter\LolApi\Api(API_KEY);
+$api = new Likewinter\LolApi\Api($API_KEY);
 
-$match = $api->makeMatch(MatchRequest::byMatchId('EUW', 3329302609));
+$match = $api->makeMatch(new MatchRequest('EUW', 3329302609));
 
-print_r($match);
-
-
+echo 'List of summoners:' . PHP_EOL;
+foreach ($match->participantIdentities as $identity) {
+    echo $identity->participantId . ' ' . $identity->player->summonerName . PHP_EOL;
+}

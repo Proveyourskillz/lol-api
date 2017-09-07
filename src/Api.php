@@ -8,23 +8,14 @@ use Psr\Http\Message\ResponseInterface;
 
 use Likewinter\LolApi\ApiRequest\ApiQueryRequestInterface;
 use Likewinter\LolApi\ApiRequest\ApiRequestInterface;
-use Likewinter\LolApi\ApiRequest\LeaguePositionRequest;
-use Likewinter\LolApi\ApiRequest\LeagueRequest;
-use Likewinter\LolApi\ApiRequest\MatchListRequest;
-use Likewinter\LolApi\ApiRequest\MatchRequest;
-use Likewinter\LolApi\ApiRequest\SummonerRequest;
 use Likewinter\LolApi\Exceptions\Handler;
 use Likewinter\LolApi\Exceptions\HandlerInterface;
-use Likewinter\LolApi\Exceptions\WrongRequestException;
-use Likewinter\LolApi\Models\LeaguePositionModel;
-use Likewinter\LolApi\Models\MatchListModel;
-use Likewinter\LolApi\Models\MatchModel;
 use Likewinter\LolApi\Models\ModelInterface;
-use Likewinter\LolApi\Models\SummonerModel;
-use Likewinter\LolApi\Models\LeagueModel;
 
 class Api
 {
+    use SugarRequestsTrait;
+
     const DEFAULT_PATH = '/lol/';
     const RATE_LIMITS_TYPE = [
         'X-Rate-Limit-Count' => 'general',
@@ -60,10 +51,6 @@ class Api
         'PBE' => 'PBE1',
     ];
     /**
-     * @var string
-     */
-    private $apiKey;
-    /**
      * @var Client
      */
     private $http;
@@ -87,8 +74,7 @@ class Api
      */
     public function __construct(string $apiKey)
     {
-        $this->apiKey = $apiKey;
-        $this->http = $this->setupHttpClient();
+        $this->http = $this->setupHttpClient($apiKey);
         $this->endpointURI = new Uri('https:');
         $this->exceptionHandler = new Handler();
     }
@@ -103,70 +89,15 @@ class Api
         try {
             $response = $this->http->get($uri, $options);
             $this->setRateLimits($response);
-
-            return $apiRequest
-                ->getMapper()
-                ->map(\GuzzleHttp\json_decode($response->getBody()))
-                ->wireRegion($apiRequest->getRegion())
-                ->wireApi($this);
         } catch (RequestException $requestException) {
             $this->exceptionHandler->handle($requestException, $apiRequest);
         }
-    }
 
-    public function makeSummoner(SummonerRequest $summonerRequest): SummonerModel
-    {
-        $summoner = $this->make($summonerRequest);
-        if (!$summoner instanceof SummonerModel) {
-            throw (new WrongRequestException())
-                ->setMethodAndRequest('makeSummoner', 'SummonerRequest');
-        }
-
-        return $summoner;
-    }
-
-    public function makeMatchList(MatchListRequest $matchListRequest): MatchListModel
-    {
-        $matchList = $this->make($matchListRequest);
-        if (!$matchList instanceof MatchListModel) {
-            throw (new WrongRequestException())
-                ->setMethodAndRequest('makeMatchList', 'MatchListRequest');
-        }
-
-        return $matchList;
-    }
-
-    public function makeMatch(MatchRequest $matchRequest): MatchModel
-    {
-        $match = $this->make($matchRequest);
-        if (!$match instanceof MatchModel) {
-            throw (new WrongRequestException())
-                ->setMethodAndRequest('makeMatch', 'MatchRequest');
-        }
-
-        return $match;
-    }
-
-    public function makePositionLeague(LeaguePositionRequest $leaguePositionRequest): LeaguePositionModel
-    {
-        $league = $this->make($leaguePositionRequest);
-        if (!$league instanceof LeaguePositionModel) {
-            throw (new WrongRequestException())
-                ->setMethodAndRequest('makePositionLeague', 'LeaguePositionRequest');
-        }
-
-        return $league;
-    }
-
-    public function makeLeague(LeagueRequest $leagueRequest): LeagueModel
-    {
-        $league = $this->make($leagueRequest);
-        if (!$league instanceof LeagueModel) {
-            throw (new WrongRequestException())
-                ->setMethodAndRequest('makeLeague', 'LeagueRequest');
-        }
-
-        return $league;
+        return $apiRequest
+            ->getMapper()
+            ->map(\GuzzleHttp\json_decode($response->getBody()))
+            ->wireRegion($apiRequest->getRegion())
+            ->wireApi($this);
     }
 
     public function getRateLimits(): array
@@ -174,11 +105,11 @@ class Api
         return $this->rateLimits;
     }
 
-    private function setupHttpClient(): Client
+    private function setupHttpClient(string $apiKey): Client
     {
         return new Client([
             'headers' => [
-                'X-Riot-Token' => $this->apiKey,
+                'X-Riot-Token' => $apiKey,
             ],
         ]);
     }

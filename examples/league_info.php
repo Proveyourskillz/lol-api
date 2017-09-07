@@ -1,16 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: pilot
- * Date: 9/4/17
- * Time: 10:24 PM
- */
-
 require __DIR__ . './../vendor/autoload.php';
+$API_KEY = require __DIR__ . '/key.php';
 
-const API_KEY = 'API_KEY_HERE';
 use Likewinter\LolApi\ApiRequest\LeagueRequest;
-$api = new Likewinter\LolApi\Api(API_KEY);
-$league = $api->makeLeague(LeagueRequest::bySummonerId('EUW', 19196451));
+$api = new Likewinter\LolApi\Api($API_KEY);
+$league = $api->makeLeague(new LeagueRequest('EUW', 19196451));
 
-print_r($league);
+foreach ($league->leagueList as $item) {
+    echo $item->name . PHP_EOL;
+}

@@ -51,7 +51,6 @@ class SummonerModel extends AbstractModel
         return new LeaguePositionRequest($this->region, $this->id);
     }
 
-
     public function recentMatches(): MatchListModel
     {
         return $this->getApi()->makeMatchList($this->getMatchListRequest());
@@ -59,9 +58,8 @@ class SummonerModel extends AbstractModel
 
     public function leaguesPositions(): LeaguePositionModel
     {
-        return $this->getApi()->makePositionLeague($this->getLeaguePositionRequest());
+        return $this->getApi()->makeLeaguePosition($this->getLeaguePositionRequest());
     }
-
 
     public function matches(array $query): MatchListModel
     {
