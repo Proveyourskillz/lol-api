@@ -1,6 +1,6 @@
-<?php namespace Likewinter\LolApi\ApiRequest;
+<?php namespace PYS\LolApi\ApiRequest;
 
-use Likewinter\LolApi\Mapper\MapperInterface;
+use PYS\LolApi\Mapper\MapperInterface;
 
 abstract class AbstractRequest implements ApiRequestInterface
 {

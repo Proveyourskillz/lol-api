@@ -1,6 +1,6 @@
-<?php namespace Likewinter\LolApi\Models;
+<?php namespace PYS\LolApi\Models;
 
-use Likewinter\LolApi\Api;
+use PYS\LolApi\Api;
 
 interface ModelInterface
 {

@@ -1,6 +1,6 @@
-<?php namespace Likewinter\LolApi\ApiRequest;
+<?php namespace PYS\LolApi\ApiRequest;
 
-use Likewinter\LolApi\Mapper\MatchMapper;
+use PYS\LolApi\Mapper\MatchMapper;
 
 class MatchRequest extends AbstractRequest
 {

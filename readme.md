@@ -16,57 +16,44 @@ You can find examples of usage in `examples` dir
 
 ### Creating API instance
 ```php
-$api = new Likewinter\LolApi\Api(API_KEY);
+$api = new PYS\LolApi\Api(API_KEY);
 ```
 ### Summoner
 There are several ways to get Summoner: by account id, summoner id or by name
 
 ```php
-$summoner = $api->makeSummoner(
-    new SummonerRequest($region, $typeName, $typeValue)
-);
-// Or you can use static shorthand methods
-$summonerById = $api->makeSummoner(
-    SummonerRequest::bySummonerId($region, $summonerId)
-);
-$summonerByAccount = $api->makeSummoner(
-    SummonerRequest::byAccountId($region, $accountId)
-);
-$summonerByName = $api->makeSummoner(
-    SummonerRequest::byName($region, $name)
-);
+// You can get summoner in several ways by passing type in third argument
+// Default version: summoner, you can ommit it
+$summonerById = $api->summoner($region, $summonerId);
+$summonerByAccount = $api->makeSummoner($region, $accountId, 'account');
+$summonerByName = $api->summoner($region, $name, 'name');
 ```
 
 For more information see [Summoner API reference](https://developer.riotgames.com/api-methods/#summoner-v3)
 
 ### Match List
 
-Recent match list
+Recent
 
 ```php
-$matches = $api->makeMatchList(
-    new MatchListRequest($region, $accountId)
-);
+$matches = $api->matchList($region, $accountId);
+```
+Recent via Summoner
+
+```php
+$matches = $api->summoner($region, $summonerId)->recentMatches();
 ```
 
 Using query (e.g. one last match)
 
 ```php
-$matches = $api->makeMatchList(
-    new MatchListRequest($region, $accountId, [
+$matches = $api->matchList(
+    $region,
+    $accountId,
+    [
         'beginIndex' => 0,
         'endIndex' => 1,
     ]
-);
-```
-
-Or using fluent setters
-
-```php
-$matches = $api->makeMatchList(
-    (new MatchListRequest($region, $accountId))
-        ->fromDate(new DateTime('-24 hours'))
-        ->toDate(new DateTime('now'));
 );
 ```
 
@@ -74,18 +61,13 @@ $matches = $api->makeMatchList(
 Match by Id
 
 ```php
-$match = $api->makeMatch(
-    new MatchRequest($region, $matchId)
-);
+$match = $api->match($region, $matchId);
 ```
 
 Match within Tournament
 
 ```php
-$match = $api->makeMatch(
-    (new MatchRequest($region, $matchId))
-        ->withinTournament($tournamentId)
-);
+$match = $api->match($region, $matchId, $tournamentId);
 ```
 For more information see [Match API reference](https://developer.riotgames.com/api-methods/#match-v3)
 
@@ -94,26 +76,21 @@ For more information see [Match API reference](https://developer.riotgames.com/a
 Leagues and Positions of summoner by Summoner Id
 
 ```php
-$leaguesPositions = $api->makePositionLeague(
-    new LeaguePositionRequest($region, $summonerId)
-);
+$leaguesPositions = $api->leaguePosition($region, $summonerId);
 ```
 
 Leagues and Positions of summoner via Summoner object
 
 ```php
-$summoner = $api->makeSummoner(
-    SummonerRequest::bySummonerId($region, $summonerId)
-);
-$leaguesPositions = $summoner->leaguesPositions();
+$leaguesPositions = $api
+    ->summoner($region, $summonerId)
+    ->leaguesPositions();
 ```
 
 Leagues by Summoner Id
 
 ```php
-$leagues = $api->makeLeague(
-    new LeagueRequest($region, $summonerId)
-);
+$leagues = $api->league($region, $summonerId);
 ```
 
 ## Contributing

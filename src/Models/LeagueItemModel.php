@@ -1,4 +1,4 @@
-<?php namespace Likewinter\LolApi\Models;
+<?php namespace PYS\LolApi\Models;
 
 
 class LeagueItemModel

@@ -1,6 +1,6 @@
-<?php namespace Likewinter\LolApi\Models;
+<?php namespace PYS\LolApi\Models;
 
-use Likewinter\LolApi\ApiRequest\MatchRequest;
+use PYS\LolApi\ApiRequest\MatchRequest;
 
 class MatchListModel extends AbstractModel
 {
@@ -21,28 +21,18 @@ class MatchListModel extends AbstractModel
      */
     public $endIndex;
 
-    public function getMatchRequest(MatchReferenceModel $matchReferenceModel): MatchRequest
-    {
-        return new MatchRequest($this->region, $matchReferenceModel->gameId);
-    }
-
     public function match(MatchReferenceModel $matchReferenceModel): MatchModel
     {
         return $this
             ->getApi()
-            ->makeMatch(
-                $this->getMatchRequest($matchReferenceModel)
+            ->match(
+                $this->region,
+                $matchReferenceModel->gameId
             );
     }
 
     public function matchByNumber(int $number): MatchModel
     {
-        return $this
-            ->getApi()
-            ->makeMatch(
-                $this->getMatchRequest(
-                    $this->matches[$number]
-                )
-            );
+        return $this->match($this->matches[$number]);
     }
 }

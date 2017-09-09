@@ -1,69 +1,30 @@
-<?php namespace Likewinter\LolApi;
+<?php namespace PYS\LolApi;
 
-use Likewinter\LolApi\ApiRequest\LeaguePositionRequest;
-use Likewinter\LolApi\ApiRequest\LeagueRequest;
-use Likewinter\LolApi\ApiRequest\MatchListRequest;
-use Likewinter\LolApi\ApiRequest\MatchRequest;
-use Likewinter\LolApi\ApiRequest\SummonerRequest;
-use Likewinter\LolApi\Exceptions\WrongRequestException;
-use Likewinter\LolApi\Models\LeagueModel;
-use Likewinter\LolApi\Models\LeaguePositionModel;
-use Likewinter\LolApi\Models\MatchListModel;
-use Likewinter\LolApi\Models\MatchModel;
-use Likewinter\LolApi\Models\SummonerModel;
+use PYS\LolApi\Exceptions\WrongRequestException;
+use PYS\LolApi\Models\LeagueModel;
+use PYS\LolApi\Models\LeaguePositionModel;
+use PYS\LolApi\Models\MatchListModel;
+use PYS\LolApi\Models\MatchModel;
+use PYS\LolApi\Models\SummonerModel;
 
+/**
+ * @method SummonerModel summoner(string $region, $value, string $credential = 'summoner')
+ * @method MatchModel match(string $region, int $matchId, ?int $tournamentId = null)
+ * @method MatchListModel matchList(string $region, int $accountId, array $query = [])
+ * @method LeaguePositionModel leaguePosition(string $region, int $summonerId)
+ * @method LeagueModel league(string $region, int $summonerId)
+ */
 trait SugarRequestsTrait
 {
-    public function makeSummoner(SummonerRequest $summonerRequest): SummonerModel
+    public function __call($name, $args)
     {
-        $summoner = $this->make($summonerRequest);
-        if (!$summoner instanceof SummonerModel) {
-            throw (new WrongRequestException())
-                ->setMethodAndRequest('makeSummoner', 'SummonerRequest');
+        $class = sprintf('PYS\LolApi\ApiRequest\%sRequest', ucfirst($name));
+        if (class_exists($class)) {
+            return $this->make(
+                new $class(...$args)
+            );
         }
 
-        return $summoner;
-    }
-
-    public function makeMatchList(MatchListRequest $matchListRequest): MatchListModel
-    {
-        $matchList = $this->make($matchListRequest);
-        if (!$matchList instanceof MatchListModel) {
-            throw (new WrongRequestException())
-                ->setMethodAndRequest('makeMatchList', 'MatchListRequest');
-        }
-
-        return $matchList;
-    }
-
-    public function makeMatch(MatchRequest $matchRequest): MatchModel
-    {
-        $match = $this->make($matchRequest);
-        if (!$match instanceof MatchModel) {
-            throw (new WrongRequestException())
-                ->setMethodAndRequest('makeMatch', 'MatchRequest');
-        }
-        return $match;
-    }
-
-    public function makeLeaguePosition(LeaguePositionRequest $leaguePositionRequest): LeaguePositionModel
-    {
-        $league = $this->make($leaguePositionRequest);
-        if (!$league instanceof LeaguePositionModel) {
-            throw (new WrongRequestException())
-                ->setMethodAndRequest('makePositionLeague', 'LeaguePositionRequest');
-        }
-
-        return $league;
-    }
-    public function makeLeague(LeagueRequest $leagueRequest): LeagueModel
-    {
-        $league = $this->make($leagueRequest);
-        if (!$league instanceof LeagueModel) {
-            throw (new WrongRequestException())
-                ->setMethodAndRequest('makeLeague', 'LeagueRequest');
-        }
-
-        return $league;
+        throw new WrongRequestException("Request $name doesn't exists");
     }
 }

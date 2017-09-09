@@ -1,6 +1,6 @@
-<?php namespace Likewinter\LolApi\Mapper;
+<?php namespace PYS\LolApi\Mapper;
 
-use Likewinter\LolApi\Models\SummonerModel;
+use PYS\LolApi\Models\SummonerModel;
 
 class SummonerMapper extends AbstractMapper
 {

@@ -1,6 +1,6 @@
-<?php namespace Likewinter\LolApi\Mapper;
+<?php namespace PYS\LolApi\Mapper;
 
-use Likewinter\LolApi\Models\ModelInterface;
+use PYS\LolApi\Models\ModelInterface;
 
 interface MapperInterface
 {

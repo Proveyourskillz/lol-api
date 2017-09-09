@@ -1,7 +1,7 @@
-<?php namespace Likewinter\LolApi\Exceptions;
+<?php namespace PYS\LolApi\Exceptions;
 
 use GuzzleHttp\Exception\RequestException;
-use Likewinter\LolApi\ApiRequest\ApiRequestInterface;
+use PYS\LolApi\ApiRequest\ApiRequestInterface;
 use ReflectionClass;
 
 class Handler implements HandlerInterface

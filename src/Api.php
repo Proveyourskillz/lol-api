@@ -1,4 +1,4 @@
-<?php namespace Likewinter\LolApi;
+<?php namespace PYS\LolApi;
 
 use DusanKasan\Knapsack\Collection;
 use GuzzleHttp\Client;
@@ -6,11 +6,11 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\ResponseInterface;
 
-use Likewinter\LolApi\ApiRequest\ApiQueryRequestInterface;
-use Likewinter\LolApi\ApiRequest\ApiRequestInterface;
-use Likewinter\LolApi\Exceptions\Handler;
-use Likewinter\LolApi\Exceptions\HandlerInterface;
-use Likewinter\LolApi\Models\ModelInterface;
+use PYS\LolApi\ApiRequest\ApiQueryRequestInterface;
+use PYS\LolApi\ApiRequest\ApiRequestInterface;
+use PYS\LolApi\Exceptions\Handler;
+use PYS\LolApi\Exceptions\HandlerInterface;
+use PYS\LolApi\Models\ModelInterface;
 
 class Api
 {
@@ -79,6 +79,11 @@ class Api
         $this->exceptionHandler = new Handler();
     }
 
+    /**
+     * @param ApiRequestInterface $apiRequest
+     *
+     * @return ModelInterface
+     */
     public function make(ApiRequestInterface $apiRequest): ModelInterface
     {
         $uri = $this->getUriForRequest($apiRequest);

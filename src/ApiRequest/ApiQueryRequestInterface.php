@@ -1,4 +1,4 @@
-<?php namespace Likewinter\LolApi\ApiRequest;
+<?php namespace PYS\LolApi\ApiRequest;
 
 interface ApiQueryRequestInterface
 {

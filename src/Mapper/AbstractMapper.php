@@ -1,7 +1,8 @@
-<?php namespace Likewinter\LolApi\Mapper;
+<?php namespace PYS\LolApi\Mapper;
 
 use JsonMapper;
-use Likewinter\LolApi\Models\ModelInterface;
+use PYS\LolApi\Exceptions\WrongMapperException;
+use PYS\LolApi\Models\ModelInterface;
 
 abstract class AbstractMapper implements MapperInterface
 {
@@ -23,6 +24,11 @@ abstract class AbstractMapper implements MapperInterface
 
     public function map($data): ModelInterface
     {
-        return $this->mapper->map($data, $this->getModeInstance());
+        $model = $this->mapper->map($data, $this->getModeInstance());
+        if (!$model instanceof ModelInterface) {
+            throw new WrongMapperException('You must always map to object that implements ModelInterface');
+        }
+
+        return $model;
     }
 }

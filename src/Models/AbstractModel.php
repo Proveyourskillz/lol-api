@@ -1,7 +1,7 @@
-<?php namespace Likewinter\LolApi\Models;
+<?php namespace PYS\LolApi\Models;
 
-use Likewinter\LolApi\Api;
-use Likewinter\LolApi\Exceptions\NonApiModel;
+use PYS\LolApi\Api;
+use PYS\LolApi\Exceptions\NonApiModel;
 
 abstract class AbstractModel implements ModelInterface
 {

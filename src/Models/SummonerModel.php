@@ -1,7 +1,7 @@
-<?php namespace Likewinter\LolApi\Models;
+<?php namespace PYS\LolApi\Models;
 
-use Likewinter\LolApi\ApiRequest\MatchListRequest;
-use Likewinter\LolApi\ApiRequest\LeaguePositionRequest;
+use PYS\LolApi\ApiRequest\MatchListRequest;
+use PYS\LolApi\ApiRequest\LeaguePositionRequest;
 
 class SummonerModel extends AbstractModel
 {
@@ -41,34 +41,26 @@ class SummonerModel extends AbstractModel
         $this->revisionDate = (new \DateTime())->setTimestamp($revisionDate / 1000);
     }
 
-    public function getMatchListRequest(): MatchListRequest
-    {
-        return new MatchListRequest($this->region, $this->accountId);
-    }
-
-    public function getLeaguePositionRequest(): LeaguePositionRequest
-    {
-        return new LeaguePositionRequest($this->region, $this->id);
-    }
-
-    public function recentMatches(): MatchListModel
-    {
-        return $this->getApi()->makeMatchList($this->getMatchListRequest());
-    }
-
     public function leaguesPositions(): LeaguePositionModel
     {
-        return $this->getApi()->makeLeaguePosition($this->getLeaguePositionRequest());
+        return $this
+            ->getApi()
+            ->leaguePosition($this->region, $this->id);
     }
 
     public function matches(array $query): MatchListModel
     {
         return $this
             ->getApi()
-            ->makeMatchList(
-                $this
-                    ->getMatchListRequest()
-                    ->setQuery($query)
+            ->matchList(
+                $this->region,
+                $this->accountId,
+                $query
             );
+    }
+
+    public function recentMatches(): MatchListModel
+    {
+        return $this->matches([]);
     }
 }

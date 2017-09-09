@@ -1,8 +1,8 @@
-<?php namespace Likewinter\LolApi\Mapper;
+<?php namespace PYS\LolApi\Mapper;
 
-use Likewinter\LolApi\Models\CurrentLeaguePositionModel;
-use Likewinter\LolApi\Models\LeaguePositionModel;
-use Likewinter\LolApi\Models\ModelInterface;
+use PYS\LolApi\Models\CurrentLeaguePositionModel;
+use PYS\LolApi\Models\LeaguePositionModel;
+use PYS\LolApi\Models\ModelInterface;
 
 class LeaguePositionMapper extends AbstractMapper
 {

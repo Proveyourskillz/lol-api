@@ -1,6 +1,6 @@
-<?php namespace Likewinter\LolApi\Mapper;
+<?php namespace PYS\LolApi\Mapper;
 
-use Likewinter\LolApi\Models\MatchModel as MatchModel;
+use PYS\LolApi\Models\MatchModel as MatchModel;
 
 class MatchMapper extends AbstractMapper
 {

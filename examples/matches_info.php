@@ -2,11 +2,9 @@
 require __DIR__ . './../vendor/autoload.php';
 $API_KEY = require __DIR__ . '/key.php';
 
-use Likewinter\LolApi\ApiRequest\SummonerRequest;
+$api = new PYS\LolApi\Api($API_KEY);
 
-$api = new Likewinter\LolApi\Api($API_KEY);
-
-$summoner = $api->makeSummoner(SummonerRequest::bySummonerId('EUW', 19196451));
+$summoner = $api->summoner('EUW', 19196451);
 $matchList = $summoner->matches([
     'beginIndex' => 0,
     'endIndex' => 1,

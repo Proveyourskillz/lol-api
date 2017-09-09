@@ -1,3 +1,3 @@
-<?php namespace Likewinter\LolApi\Exceptions;
+<?php namespace PYS\LolApi\Exceptions;
 
 class AccessDeniedException extends \Exception {}

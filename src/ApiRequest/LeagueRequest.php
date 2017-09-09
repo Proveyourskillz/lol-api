@@ -1,6 +1,6 @@
-<?php namespace Likewinter\LolApi\ApiRequest;
+<?php namespace PYS\LolApi\ApiRequest;
 
-use Likewinter\LolApi\Mapper\LeagueMapper;
+use PYS\LolApi\Mapper\LeagueMapper;
 
 class LeagueRequest extends AbstractRequest implements ApiRequestInterface
 {

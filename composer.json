@@ -1,26 +1,40 @@
 {
-    "name": "likewinter/lol-api",
+    "name": "proveyourskillz/lol-api",
     "description": "Yet Another LoL API SDK",
     "type": "library",
     "require": {
         "guzzlehttp/guzzle": "^6.3",
         "roave/security-advisories": "dev-master",
         "dusank/knapsack": "^10.0",
-        "netresearch/jsonmapper": "^1.1"
+        "netresearch/jsonmapper": "^1.1",
+        "illuminate/support": "^5.5"
     },
     "autoload": {
       "psr-4": {
-          "Likewinter\\LolApi\\": "src/"
+          "PYS\\LolApi\\": "src/"
       }
     },
     "require-dev": {
         "phpunit/phpunit": "^6.2"
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "PYS\\LolApi\\Laravel\\ServiceProvider"
+            ],
+            "aliases": {
+                "LolApi": "PYS\\LolApi\\Laravel\\Facade"
+            }
+        }
+    },
     "license": "MIT",
     "authors": [
         {
             "name": "Anton Orlov",
-            "email": "anton@pinked.ru"
+            "email": "anton@proveyourskillz.com"
+        }, {
+            "name": "Pavel Dudko",
+            "email": "pavel@proveyourskillz.com"
         }
     ]
 }

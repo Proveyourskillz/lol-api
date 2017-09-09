@@ -1,7 +1,7 @@
-<?php namespace Likewinter\LolApi\ApiRequest;
+<?php namespace PYS\LolApi\ApiRequest;
 
-use Likewinter\LolApi\Api;
-use Likewinter\LolApi\Mapper\MapperInterface;
+use PYS\LolApi\Api;
+use PYS\LolApi\Mapper\MapperInterface;
 
 trait GettersTrait
 {
