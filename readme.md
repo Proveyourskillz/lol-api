@@ -8,16 +8,31 @@ Dead simple wrapper of Riot Games API (LoL)
 
 ## Installation
 
-run `composer install` from clonned repository folder
-
-## Usage
-
-You can find examples of usage in `examples` dir
+`composer require proveyourskillz/lol-api`
 
 ### Creating API instance
 ```php
 $api = new PYS\LolApi\Api(API_KEY);
 ```
+### Laravel/Lumen service provider and Facade
+
+#### Laravel 5.5 / Lumen
+ServiceProvider and Facade are registered automatically through [package discovery](https://laravel.com/docs/5.5/packages#package-discovery)
+
+#### Laravel 5.4
+In `config/app.php` add `PYS\LolApi\Laravel\ServiceProvider` as provider
+
+#### Lumen 5.4
+Register ServiceProvider according [documentation](https://lumen.laravel.com/docs/5.5/providers#registering-providers)
+
+Optionally you can add facade to aliases `'LolApi' => PYS\LolApi\Laravel\Facade::class`
+
+After installation you can use API through facade or inject as dependency
+
+## Usage
+
+You can find examples of usage in `examples` dir
+
 ### Summoner
 There are several ways to get Summoner: by account id, summoner id or by name
 

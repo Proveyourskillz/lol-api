@@ -7,6 +7,6 @@ class Facade extends BaseFacade
 {
     public static function getFacadeAccessor()
     {
-        return static::$app->make(Api::class);
+        return 'lol-api';
     }
 }

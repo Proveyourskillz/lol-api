@@ -5,8 +5,6 @@ use PYS\LolApi\Api;
 
 class ServiceProvider extends BaseServiceProvider
 {
-    protected $defer = true;
-
     public function boot()
     {
         $this->publishes([
@@ -22,5 +20,6 @@ class ServiceProvider extends BaseServiceProvider
                 return new Api(config('lol-api.api_key'));
             }
         );
+        $this->app->alias(Api::class, 'lol-api');
     }
 }
