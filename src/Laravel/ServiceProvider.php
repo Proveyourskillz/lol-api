@@ -5,6 +5,8 @@ use PYS\LolApi\Api;
 
 class ServiceProvider extends BaseServiceProvider
 {
+    protected $defer = true;
+
     public function boot()
     {
         $this->publishes([
