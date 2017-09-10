@@ -108,6 +108,32 @@ Leagues by Summoner Id
 $leagues = $api->league($region, $summonerId);
 ```
 
+## Reusable requests and queries
+Examples from above (e.g. match list request with query) are shows usage of syntax sugar methods and can be rewritten as
+
+```php
+use PYS\LolApi\ApiRequest\MatchListRequest;
+use PYS\LolApi\ApiRequest\Query\MatchListQuery;
+
+$api = new PYS\LolApi\Api($API_KEY);
+
+$query = new MatchListQuery;
+$request = new MatchListRequest($region, $accountId);
+$request->setQuery($query->lastMatches(1));
+
+$matchList = $api->make($request);
+```
+
+Query objects have fluent setters for easy setup some properties like dates etc.
+
+```php
+// Setup query object to get last 5 matches in 24 hours
+$query = new MatchListQuery;
+$query
+    ->fromDate(new DateTime('-24 hours'))
+    ->lastMatches(5);
+``` 
+
 ## Contributing
 
 1. Fork it!
