@@ -9,7 +9,7 @@ abstract class AbstractRequest implements ApiRequestInterface
      * Name of mapper class
      * @var string
      */
-    protected $mapperClass;
+    protected static $mapperClass;
     /**
      * Data to object mapper class name
      * @var MapperInterface

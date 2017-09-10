@@ -1,8 +1,9 @@
 <?php namespace PYS\LolApi\ApiRequest;
 
+use PYS\LolApi\ApiRequest\Query\QueryInterface;
+
 interface ApiQueryRequestInterface
 {
-    public function getQuery(): array;
-    public function setQuery(array $query);
-    public function filterQuery(array $query): array;
+    public function getQuery(): QueryInterface;
+    public function setQuery(QueryInterface $query): void;
 }

@@ -4,7 +4,7 @@ use PYS\LolApi\Mapper\MatchMapper;
 
 class MatchRequest extends AbstractRequest
 {
-    protected $mapperClass = MatchMapper::class;
+    protected static $mapperClass = MatchMapper::class;
 
     protected $type = 'match';
     protected $version = 3;

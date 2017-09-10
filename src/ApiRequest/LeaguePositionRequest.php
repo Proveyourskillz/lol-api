@@ -4,7 +4,7 @@ use PYS\LolApi\Mapper\LeaguePositionMapper;
 
 class LeaguePositionRequest extends AbstractRequest implements ApiRequestInterface
 {
-    protected $mapperClass = LeaguePositionMapper::class;
+    protected static $mapperClass = LeaguePositionMapper::class;
 
     protected $type = 'league';
     protected $version = 3;

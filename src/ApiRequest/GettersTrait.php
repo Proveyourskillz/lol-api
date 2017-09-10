@@ -32,10 +32,6 @@ trait GettersTrait
 
     public function getMapper(): MapperInterface
     {
-        if (!$this->mapper) {
-            $this->mapper = new $this->mapperClass;
-        }
-
-        return $this->mapper;
+        return new static::$mapperClass;
     }
 }

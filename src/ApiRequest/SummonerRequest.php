@@ -6,7 +6,7 @@ class SummonerRequest extends AbstractRequest
 {
     const CREDENTIAL_TYPES = ['account', 'name', 'summoner'];
 
-    protected $mapperClass = SummonerMapper::class;
+    protected static $mapperClass = SummonerMapper::class;
 
     protected $type = 'summoner';
     protected $version = 3;

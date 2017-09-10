@@ -15,7 +15,6 @@ use PYS\LolApi\Models\ModelInterface;
 class Api
 {
     use SugarRequestsTrait;
-
     const DEFAULT_PATH = '/lol/';
     const RATE_LIMITS_TYPE = [
         'X-Rate-Limit-Count' => 'general',
@@ -89,7 +88,7 @@ class Api
         $uri = $this->getUriForRequest($apiRequest);
         $options = [];
         if ($apiRequest instanceof ApiQueryRequestInterface) {
-            $options['query'] = $apiRequest->getQuery();
+            $options['query'] = $apiRequest->getQuery()->toArray();
         }
         try {
             $response = $this->http->get($uri, $options);
@@ -121,19 +120,27 @@ class Api
 
     private function setRateLimits(ResponseInterface $response): void
     {
-        $this->rateLimits = Collection::from($response->getHeaders())
-            ->only(['X-Rate-Limit-Count', 'X-App-Rate-Limit-Count', 'X-Method-Rate-Limit-Count'])
-            ->reduce(function (array $limits, array $value, string $name) {
-                foreach (explode(',', $value[0]) as $limit) {
-                    [$requests, $seconds] = explode(':', $limit);
-                    $limits[self::RATE_LIMITS_TYPE[$name]][] = [
-                        'requests' => (int)$requests,
-                        'seconds' => (int)$seconds,
-                    ];
-                }
-
-                return $limits;
-            }, []);
+        $headers = array_filter(
+            $response->getHeaders(),
+            function ($key) {
+                return in_array(
+                    $key,
+                    ['X-Rate-Limit-Count', 'X-App-Rate-Limit-Count', 'X-Method-Rate-Limit-Count'],
+                    true
+                );
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+        foreach ($headers as $name => $value) {
+            foreach (explode(',', $value[0]) as $limit) {
+                [$requests, $seconds] = explode(':', $limit);
+                $this->rateLimits[self::RATE_LIMITS_TYPE[$name]][] = [
+                    'requests' => (int)$requests,
+                    'seconds' => (int)$seconds,
+                ];
+            }
+        }
+        unset($headers);
     }
 
     private function getUriForRequest(ApiRequestInterface $apiRequest): Uri

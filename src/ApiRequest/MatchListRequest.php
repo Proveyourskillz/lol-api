@@ -1,21 +1,14 @@
 <?php namespace PYS\LolApi\ApiRequest;
 
+use PYS\LolApi\ApiRequest\Query\MatchListQuery;
+use PYS\LolApi\ApiRequest\Query\QueryTrait;
 use PYS\LolApi\Mapper\MatchListMapper;
 
 class MatchListRequest extends AbstractRequest implements ApiQueryRequestInterface
 {
-    use QueryParamsTrait;
+    use QueryTrait;
 
-    protected $mapperClass = MatchListMapper::class;
-    protected static $queryParams = [
-        'queue',
-        'beginTime',
-        'endIndex',
-        'season',
-        'champion',
-        'beginIndex',
-        'endTime',
-    ];
+    protected static $mapperClass = MatchListMapper::class;
 
     protected $type = 'match';
     protected $version = 3;
@@ -33,12 +26,12 @@ class MatchListRequest extends AbstractRequest implements ApiQueryRequestInterfa
     {
         $this->region = $region;
         $this->accountId = $accountId;
-        $this->query = $this->filterQuery($query);
+        $this->query = new MatchListQuery($query);
     }
 
     public function getSubtypes(): array
     {
-        if (empty($this->query)) {
+        if (empty($this->query->toArray())) {
             return [
                 'matchlists/by-account' => $this->accountId,
                 'recent',
@@ -46,35 +39,5 @@ class MatchListRequest extends AbstractRequest implements ApiQueryRequestInterfa
         }
 
         return ['matchlists/by-account' => $this->accountId];
-    }
-
-    public function fromDate(\DateTime $dateTime): self
-    {
-        $this->query['beginTime'] = $dateTime->getTimestamp() * 1000;
-
-        return $this;
-    }
-
-    public function toDate(\DateTime $dateTime): self
-    {
-        $this->query['endTime'] = $dateTime->getTimestamp() * 1000;
-
-        return $this;
-    }
-
-    public function lastMatches(int $number): self
-    {
-        $this->query['beginIndex'] = 0;
-        $this->query['endIndex'] = $number;
-
-        return $this;
-    }
-
-    public function matchRange(int $start, int $end): self
-    {
-        $this->query['beginIndex'] = $start;
-        $this->query['endIndex'] = $end;
-
-        return $this;
     }
 }
