@@ -20,12 +20,7 @@ trait GettersTrait
         return $this->version;
     }
 
-    public function getPlatform(): ?string
-    {
-        return Api::REGIONS_PLATFORMS[$this->region] ?? null;
-    }
-
-    public function getRegion(): ?string
+    public function getRegion(): Region
     {
         return $this->region;
     }

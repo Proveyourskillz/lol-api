@@ -14,13 +14,16 @@ class LeaguePositionRequest extends AbstractRequest implements ApiRequestInterfa
     /**
      * MatchRequest constructor.
      *
-     * @param $region
-     * @param $summonerId
+     * @param string|Region $region
+     * @param int $summonerId
+     *
+     * @throws \PYS\LolApi\Exceptions\WrongRegion
      */
-    public function __construct(string $region, int $summonerId)
+    public function __construct($region, int $summonerId)
     {
+        parent::__construct($region);
+
         $this->summonerId = $summonerId;
-        $this->region = $region;
     }
 
     public function getSubtypes(): array

@@ -17,7 +17,19 @@ abstract class AbstractRequest implements ApiRequestInterface
     protected $mapper;
     /**
      * Region of API platform
-     * @var string
+     * @var Region
      */
     protected $region;
+
+    /**
+     * AbstractRequest constructor.
+     *
+     * @param string|Region $region
+     *
+     * @throws \PYS\LolApi\Exceptions\WrongRegion
+     */
+    public function __construct($region)
+    {
+        $this->region = $region instanceof Region ? $region : new Region($region);
+    }
 }

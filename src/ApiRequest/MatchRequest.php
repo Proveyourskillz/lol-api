@@ -15,14 +15,17 @@ class MatchRequest extends AbstractRequest
     /**
      * MatchRequest constructor.
      *
-     * @param string $region
+     * @param string|Region $region
      * @param int $matchId
      * @param int|null $tournamentId
+     *
+     * @throws \PYS\LolApi\Exceptions\WrongRegion
      */
-    public function __construct(string $region, int $matchId, ?int $tournamentId = null)
+    public function __construct($region, int $matchId, ?int $tournamentId = null)
     {
+        parent::__construct($region);
+
         $this->matchId = $matchId;
-        $this->region = $region;
         $this->tournamentId = $tournamentId;
     }
 

@@ -1,13 +1,14 @@
 <?php namespace PYS\LolApi\Models;
 
 use PYS\LolApi\Api;
+use PYS\LolApi\ApiRequest\Region;
 use PYS\LolApi\Exceptions\NonApiModel;
 
 abstract class AbstractModel implements ModelInterface
 {
     /**
      * Region of request
-     * @var string
+     * @var Region
      */
     public $region;
     /**
@@ -15,7 +16,7 @@ abstract class AbstractModel implements ModelInterface
      */
     private $wiredApi;
 
-    public function wireRegion(string $region): ModelInterface
+    public function wireRegion(Region $region): ModelInterface
     {
         $this->region = $region;
 
@@ -33,8 +34,8 @@ abstract class AbstractModel implements ModelInterface
     {
         if ($this->wiredApi) {
             return $this->wiredApi;
-        } else {
-            throw new NonApiModel('Model was not instantiated by API Request');
         }
+
+        throw new NonApiModel('Model was not instantiated by API Request');
     }
 }

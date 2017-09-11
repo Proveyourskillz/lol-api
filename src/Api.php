@@ -1,6 +1,5 @@
 <?php namespace PYS\LolApi;
 
-use DusanKasan\Knapsack\Collection;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Uri;
@@ -15,40 +14,14 @@ use PYS\LolApi\Models\ModelInterface;
 class Api
 {
     use SugarRequestsTrait;
+
     const DEFAULT_PATH = '/lol/';
     const RATE_LIMITS_TYPE = [
         'X-Rate-Limit-Count' => 'general',
         'X-App-Rate-Limit-Count' => 'app',
         'X-Method-Rate-Limit-Count' => 'method',
     ];
-    const PLATFORMS_ENDPOINTS = [
-        'BR1' => 'br1.api.riotgames.com',
-        'EUN1' => 'eun1.api.riotgames.com',
-        'EUW1' => 'euw1.api.riotgames.com',
-        'JP1' => 'jp1.api.riotgames.com',
-        'KR' => 'kr.api.riotgames.com',
-        'LA1' => 'la1.api.riotgames.com',
-        'LA2' => 'la2.api.riotgames.com',
-        'NA1' => 'na1.api.riotgames.com',
-        'OC1' => 'oc1.api.riotgames.com',
-        'TR1' => 'tr1.api.riotgames.com',
-        'RU' => 'ru.api.riotgames.com',
-        'PBE1' => 'pbe1.api.riotgames.com',
-    ];
-    const REGIONS_PLATFORMS = [
-        'BR' => 'BR1',
-        'EUNE' => 'EUN1',
-        'EUW' => 'EUW1',
-        'JP' => 'JP1',
-        'KR' => 'KR',
-        'LAN' => 'LA1',
-        'LAS' => 'LA2',
-        'NA' => 'NA1',
-        'OCE' => 'OC1',
-        'TR' => 'TR1',
-        'RU' => 'RU',
-        'PBE' => 'PBE1',
-    ];
+
     /**
      * @var Client
      */
@@ -145,7 +118,7 @@ class Api
 
     private function getUriForRequest(ApiRequestInterface $apiRequest): Uri
     {
-        $host = self::PLATFORMS_ENDPOINTS[$apiRequest->getPlatform()];
+        $host = $apiRequest->getRegion()->getPlatformEndpoint();
         $path = self::DEFAULT_PATH . $apiRequest->getType() . '/';
         if ($version = $apiRequest->getVersion()) {
             $path .= "v{$version}/";

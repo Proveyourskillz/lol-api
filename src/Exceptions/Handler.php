@@ -19,11 +19,11 @@ class Handler implements HandlerInterface
                 break;
             case 404:
                 $type = str_replace(
-                    (new ReflectionClass($apiRequest))->getShortName(),
                     'Request',
-                    ''
+                    '',
+                    (new ReflectionClass($apiRequest))->getShortName()
                 );
-                throw new NotFoundException("Request of type \"$type\" not found");
+                throw new NotFoundException("Request of type $type not found");
                 break;
             case 429:
                 throw new RateLimitExceededException(

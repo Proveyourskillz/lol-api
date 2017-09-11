@@ -16,7 +16,7 @@ $api = new PYS\LolApi\Api(API_KEY);
 ```
 ### Laravel/Lumen service provider and Facade
 
-#### Laravel 5.5 / Lumen
+#### Laravel/Lumen 5.5
 ServiceProvider and Facade are registered automatically through [package discovery](https://laravel.com/docs/5.5/packages#package-discovery)
 
 #### Laravel 5.4
@@ -32,6 +32,15 @@ After installation you can use API through facade or inject as dependency
 ## Usage
 
 You can find examples of usage in `examples` dir
+
+### Region
+You can pass region to request as [2-3 characters code](https://developer.riotgames.com/regional-endpoints.html) but better use `Region` class constants
+
+```php
+use PYS\LolApi\ApiRequest\Region;
+
+$summoner = $api->summoner(Region::EUW, $summonerId);
+```
 
 ### Summoner
 There are several ways to get Summoner: by account id, summoner id or by name

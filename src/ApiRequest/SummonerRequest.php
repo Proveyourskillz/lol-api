@@ -17,15 +17,18 @@ class SummonerRequest extends AbstractRequest
     /**
      * SummonerRequest constructor.
      *
+     * @param string|Region $region
      * @param string $credential
      * @param mixed $value
-     * @param string $region
+     *
+     * @throws \PYS\LolApi\Exceptions\WrongRegion
      */
-    public function __construct(string $region, $value, string $credential = 'summoner')
+    public function __construct($region, $value, string $credential = 'summoner')
     {
+        parent::__construct($region);
+
         $this->credential = static::validateCredential($credential);
         $this->value = $value;
-        $this->region = $region;
     }
 
     public function getSubtypes(): array
