@@ -11,7 +11,6 @@ class MatchListRequest extends AbstractRequest implements ApiQueryRequestInterfa
     protected static $mapperClass = MatchListMapper::class;
 
     protected $type = 'match';
-    protected $version = 3;
 
     protected $accountId;
 
@@ -20,14 +19,9 @@ class MatchListRequest extends AbstractRequest implements ApiQueryRequestInterfa
      *
      * @param int $accountId
      * @param array $query
-     * @param string|Region $region
-     *
-     * @throws \PYS\LolApi\Exceptions\WrongRegion
      */
-    public function __construct($region, int $accountId, array $query = [])
+    public function __construct(int $accountId, array $query = [])
     {
-        parent::__construct($region);
-
         $this->accountId = $accountId;
         $this->query = new MatchListQuery($query);
     }

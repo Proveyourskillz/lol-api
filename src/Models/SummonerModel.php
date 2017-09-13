@@ -1,8 +1,5 @@
 <?php namespace PYS\LolApi\Models;
 
-use PYS\LolApi\ApiRequest\MatchListRequest;
-use PYS\LolApi\ApiRequest\LeaguePositionRequest;
-
 class SummonerModel extends AbstractModel
 {
     /**

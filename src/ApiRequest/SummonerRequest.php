@@ -9,7 +9,6 @@ class SummonerRequest extends AbstractRequest
     protected static $mapperClass = SummonerMapper::class;
 
     protected $type = 'summoner';
-    protected $version = 3;
 
     protected $credential;
     protected $value;
@@ -17,16 +16,11 @@ class SummonerRequest extends AbstractRequest
     /**
      * SummonerRequest constructor.
      *
-     * @param string|Region $region
      * @param string $credential
      * @param mixed $value
-     *
-     * @throws \PYS\LolApi\Exceptions\WrongRegion
      */
-    public function __construct($region, $value, string $credential = 'summoner')
+    public function __construct($value, string $credential = 'summoner')
     {
-        parent::__construct($region);
-
         $this->credential = static::validateCredential($credential);
         $this->value = $value;
     }

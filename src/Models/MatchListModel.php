@@ -1,7 +1,5 @@
 <?php namespace PYS\LolApi\Models;
 
-use PYS\LolApi\ApiRequest\MatchRequest;
-
 class MatchListModel extends AbstractModel
 {
     /**

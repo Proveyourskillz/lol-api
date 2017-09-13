@@ -7,16 +7,29 @@ use Psr\Http\Message\ResponseInterface;
 
 use PYS\LolApi\ApiRequest\ApiQueryRequestInterface;
 use PYS\LolApi\ApiRequest\ApiRequestInterface;
+use PYS\LolApi\ApiRequest\Region;
 use PYS\LolApi\Exceptions\Handler;
 use PYS\LolApi\Exceptions\HandlerInterface;
+use PYS\LolApi\Exceptions\WrongRegion;
 use PYS\LolApi\Models\ModelInterface;
+use PYS\LolApi\Exceptions\WrongRequestException;
+use PYS\LolApi\Models\LeagueModel;
+use PYS\LolApi\Models\LeaguePositionModel;
+use PYS\LolApi\Models\MatchListModel;
+use PYS\LolApi\Models\MatchModel;
+use PYS\LolApi\Models\SummonerModel;
 
+/**
+ * @method SummonerModel summoner(Region|string $region, $value, string $credential = 'summoner')
+ * @method MatchModel match(Region|string $region, int $matchId, ?int $tournamentId = null)
+ * @method MatchListModel matchList(Region|string $region, int $accountId, array $query = [])
+ * @method LeaguePositionModel leaguePosition(Region|string $region, int $summonerId)
+ * @method LeagueModel league(Region|string $region, int $summonerId)
+ */
 class Api
 {
-    use SugarRequestsTrait;
-
-    const DEFAULT_PATH = '/lol/';
-    const RATE_LIMITS_TYPE = [
+    private const DEFAULT_PATH = '/lol/';
+    private const RATE_LIMITS_TYPE = [
         'X-Rate-Limit-Count' => 'general',
         'X-App-Rate-Limit-Count' => 'app',
         'X-Method-Rate-Limit-Count' => 'method',
@@ -51,14 +64,32 @@ class Api
         $this->exceptionHandler = new Handler();
     }
 
+    public function __call($name, $args)
+    {
+        $region = array_shift($args);
+        if (!$region instanceof Region) {
+            $region = new Region($region);
+        }
+        $class = sprintf('PYS\LolApi\ApiRequest\%sRequest', ucfirst($name));
+        if (class_exists($class)) {
+            return $this->make(
+                $region,
+                new $class(...$args)
+            );
+        }
+
+        throw new WrongRequestException("Request $name doesn't exists");
+    }
+
     /**
+     * @param Region $region
      * @param ApiRequestInterface $apiRequest
      *
      * @return ModelInterface
      */
-    public function make(ApiRequestInterface $apiRequest): ModelInterface
+    public function make(Region $region, ApiRequestInterface $apiRequest): ModelInterface
     {
-        $uri = $this->getUriForRequest($apiRequest);
+        $uri = $this->getUriForRequest($apiRequest, $region);
         $options = [];
         if ($apiRequest instanceof ApiQueryRequestInterface) {
             $options['query'] = $apiRequest->getQuery()->toArray();
@@ -73,7 +104,7 @@ class Api
         return $apiRequest
             ->getMapper()
             ->map(\GuzzleHttp\json_decode($response->getBody()))
-            ->wireRegion($apiRequest->getRegion())
+            ->wireRegion($region)
             ->wireApi($this);
     }
 
@@ -116,9 +147,9 @@ class Api
         unset($headers);
     }
 
-    private function getUriForRequest(ApiRequestInterface $apiRequest): Uri
+    private function getUriForRequest(ApiRequestInterface $apiRequest, Region $region): Uri
     {
-        $host = $apiRequest->getRegion()->getPlatformEndpoint();
+        $host = $region->getPlatformEndpoint();
         $path = self::DEFAULT_PATH . $apiRequest->getType() . '/';
         if ($version = $apiRequest->getVersion()) {
             $path .= "v{$version}/";

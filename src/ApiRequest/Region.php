@@ -2,6 +2,20 @@
 
 use PYS\LolApi\Exceptions\WrongRegion;
 
+/**
+ * @method static Region BR
+ * @method static Region EUNE
+ * @method static Region EUW
+ * @method static Region JP
+ * @method static Region KR
+ * @method static Region LAN
+ * @method static Region LAS
+ * @method static Region NA
+ * @method static Region OCE
+ * @method static Region TR
+ * @method static Region RU
+ * @method static Region PBE
+ */
 final class Region
 {
     const BR = 'BR';
@@ -74,10 +88,21 @@ final class Region
      */
     public function __construct(string $region)
     {
-        if (!$this->checkRegion($region)) {
-            throw new WrongRegion("The region $region doesn't exist in API");
-        }
+        $region = strtoupper($region);
+        self::checkRegion($region);
         $this->region = $region;
+    }
+
+    /**
+     * @param $name
+     * @param $arguments
+     *
+     * @return static
+     * @throws \PYS\LolApi\Exceptions\WrongRegion
+     */
+    public static function __callStatic($name, $arguments)
+    {
+        return new static($name);
     }
 
     /**
@@ -98,8 +123,15 @@ final class Region
         return self::PLATFORMS_ENDPOINTS[self::REGIONS_PLATFORMS[$this->region]];
     }
 
-    private function checkRegion(string $region): bool
+    /**
+     * @param string $region
+     *
+     * @throws WrongRegion
+     */
+    private static function checkRegion(string $region): void
     {
-        return in_array(strtoupper($region), self::REGIONS, true);
+        if (!in_array($region, self::REGIONS, true)) {
+            throw new WrongRegion("The region $region doesn't exist in API");
+        }
     }
 }
