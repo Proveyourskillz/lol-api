@@ -60,4 +60,14 @@ class SummonerModel extends AbstractModel
     {
         return $this->matches([]);
     }
+
+    public function currentGame(): CurrentGameModel
+    {
+        return $this
+            ->getApi()
+            ->currentGame(
+                $this->region,
+                $this->id
+            );
+    }
 }

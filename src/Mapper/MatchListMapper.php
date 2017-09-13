@@ -4,5 +4,5 @@ use PYS\LolApi\Models\MatchListModel;
 
 class MatchListMapper extends AbstractMapper
 {
-    protected $model = MatchListModel::class;
+    protected static $model = MatchListModel::class;
 }

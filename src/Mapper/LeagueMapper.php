@@ -6,7 +6,7 @@ use PYS\LolApi\Models\ModelInterface;
 
 class LeagueMapper extends AbstractMapper
 {
-    protected $model = LeagueModel::class;
+    protected static $model = LeagueModel::class;
 
     public function map($data): ModelInterface
     {

@@ -10,7 +10,7 @@ use PYS\LolApi\ApiRequest\ApiRequestInterface;
 use PYS\LolApi\ApiRequest\Region;
 use PYS\LolApi\Exceptions\Handler;
 use PYS\LolApi\Exceptions\HandlerInterface;
-use PYS\LolApi\Exceptions\WrongRegion;
+use PYS\LolApi\Models\CurrentGameModel;
 use PYS\LolApi\Models\ModelInterface;
 use PYS\LolApi\Exceptions\WrongRequestException;
 use PYS\LolApi\Models\LeagueModel;
@@ -25,6 +25,7 @@ use PYS\LolApi\Models\SummonerModel;
  * @method MatchListModel matchList(Region|string $region, int $accountId, array $query = [])
  * @method LeaguePositionModel leaguePosition(Region|string $region, int $summonerId)
  * @method LeagueModel league(Region|string $region, int $summonerId)
+ * @method CurrentGameModel currentGame(Region|string $region, int $summonerId)
  */
 class Api
 {

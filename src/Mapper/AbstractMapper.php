@@ -7,7 +7,7 @@ use PYS\LolApi\Models\ModelInterface;
 abstract class AbstractMapper implements MapperInterface
 {
     protected $mapper;
-    protected $model;
+    protected static $model;
 
     /**
      * AbstractMapper constructor.
@@ -19,7 +19,7 @@ abstract class AbstractMapper implements MapperInterface
 
     public function getModeInstance(): ModelInterface
     {
-        return new $this->model();
+        return new static::$model;
     }
 
     public function map($data): ModelInterface
