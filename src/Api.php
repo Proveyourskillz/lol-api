@@ -8,8 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use PYS\LolApi\ApiRequest\ApiQueryRequestInterface;
 use PYS\LolApi\ApiRequest\ApiRequestInterface;
 use PYS\LolApi\ApiRequest\Region;
-use PYS\LolApi\Exceptions\Handler;
-use PYS\LolApi\Exceptions\HandlerInterface;
+use PYS\LolApi\Exceptions\RequestHandler;
 use PYS\LolApi\Models\CurrentGameModel;
 use PYS\LolApi\Models\ModelInterface;
 use PYS\LolApi\Exceptions\WrongRequestException;
@@ -49,7 +48,7 @@ class Api
      */
     private $endpointURI;
     /**
-     * @var HandlerInterface
+     * @var RequestHandler
      */
     private $exceptionHandler;
 
@@ -62,9 +61,23 @@ class Api
     {
         $this->http = $this->setupHttpClient($apiKey);
         $this->endpointURI = new Uri('https:');
-        $this->exceptionHandler = new Handler();
+        $this->exceptionHandler = new RequestHandler;
     }
 
+    /**
+     * @param $name
+     * @param $args
+     *
+     * @return ModelInterface
+     *
+     * @throws Exceptions\AccessDeniedException
+     * @throws Exceptions\ApiUnavailableException
+     * @throws Exceptions\NotFoundException
+     * @throws Exceptions\OtherRequestException
+     * @throws Exceptions\RateLimitExceededException
+     * @throws Exceptions\WrongParametersException
+     * @throws Exceptions\WrongRequestException
+     */
     public function __call($name, $args)
     {
         $region = array_shift($args);
@@ -87,6 +100,13 @@ class Api
      * @param ApiRequestInterface $apiRequest
      *
      * @return ModelInterface
+     *
+     * @throws Exceptions\AccessDeniedException
+     * @throws Exceptions\ApiUnavailableException
+     * @throws Exceptions\NotFoundException
+     * @throws Exceptions\OtherRequestException
+     * @throws Exceptions\RateLimitExceededException
+     * @throws Exceptions\WrongParametersException
      */
     public function make(Region $region, ApiRequestInterface $apiRequest): ModelInterface
     {
@@ -112,6 +132,12 @@ class Api
     public function getRateLimits(): array
     {
         return $this->rateLimits;
+    }
+
+    // Return null reference when serializing models, maybe fix it in future
+    public function __sleep()
+    {
+        return [];
     }
 
     private function setupHttpClient(string $apiKey): Client
@@ -150,7 +176,18 @@ class Api
 
     private function getUriForRequest(ApiRequestInterface $apiRequest, Region $region): Uri
     {
-        $host = $region->getPlatformEndpoint();
+        return $this->endpointURI
+            ->withHost($region->getPlatformEndpoint())
+            ->withPath($this->buildPath($apiRequest));
+    }
+
+    /**
+     * @param ApiRequestInterface $apiRequest
+     *
+     * @return string
+     */
+    private function buildPath(ApiRequestInterface $apiRequest): string
+    {
         $path = self::DEFAULT_PATH . $apiRequest->getType() . '/';
         if ($version = $apiRequest->getVersion()) {
             $path .= "v{$version}/";
@@ -163,8 +200,6 @@ class Api
             }
         }
 
-        return $this->endpointURI
-            ->withHost($host)
-            ->withPath($path);
+        return $path;
     }
 }

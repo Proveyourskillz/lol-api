@@ -30,6 +30,10 @@ abstract class AbstractModel implements ModelInterface
         return $this;
     }
 
+    /**
+     * @return Api
+     * @throws NonApiModel
+     */
     public function getApi(): Api
     {
         if ($this->wiredApi) {

@@ -4,8 +4,19 @@ use GuzzleHttp\Exception\RequestException;
 use PYS\LolApi\ApiRequest\ApiRequestInterface;
 use ReflectionClass;
 
-class Handler implements HandlerInterface
+class RequestHandler
 {
+    /**
+     * @param RequestException $requestException
+     * @param ApiRequestInterface $apiRequest
+     *
+     * @throws WrongParametersException
+     * @throws AccessDeniedException
+     * @throws NotFoundException
+     * @throws RateLimitExceededException
+     * @throws ApiUnavailableException
+     * @throws OtherRequestException
+     */
     public function handle(RequestException $requestException, ApiRequestInterface $apiRequest): void
     {
         switch ($requestException->getCode()) {
@@ -15,7 +26,9 @@ class Handler implements HandlerInterface
                 );
                 break;
             case 403:
-                throw new AccessDeniedException('Something wrong with your API key or credentials');
+                throw new AccessDeniedException(
+                    'Something wrong with your API key or credentials'
+                );
                 break;
             case 404:
                 $type = str_replace(
@@ -23,7 +36,9 @@ class Handler implements HandlerInterface
                     '',
                     (new ReflectionClass($apiRequest))->getShortName()
                 );
-                throw new NotFoundException("Request of type $type not found");
+                throw new NotFoundException(
+                    "Requested entity of type $type not found"
+                );
                 break;
             case 429:
                 throw new RateLimitExceededException(
@@ -32,7 +47,9 @@ class Handler implements HandlerInterface
                 break;
             case 500:
             case 503:
-                throw new ApiUnavailableException('Riot API serve is incapable of performing the request');
+                throw new ApiUnavailableException(
+                    'Riot API serve is incapable of performing the request'
+                );
                 break;
             default:
                 throw new OtherRequestException(

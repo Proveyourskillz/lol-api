@@ -97,12 +97,11 @@ final class Region
      * @param $name
      * @param $arguments
      *
-     * @return static
-     * @throws \PYS\LolApi\Exceptions\WrongRegion
+     * @return self
      */
     public static function __callStatic($name, $arguments)
     {
-        return new static($name);
+        return new self($name);
     }
 
     /**
