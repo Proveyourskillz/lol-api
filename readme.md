@@ -27,7 +27,7 @@ Register ServiceProvider according [documentation](https://lumen.laravel.com/doc
 
 Optionally you can add facade to aliases `'LolApi' => PYS\LolApi\Laravel\Facade::class`
 
-After installation you can use API through facade or inject as dependency
+After installation, you can use API through facade or inject as dependency
 
 ## Usage
 
@@ -49,7 +49,7 @@ There are several ways to get Summoner: by account id, summoner id or by name
 // You can get summoner in several ways by passing type in third argument
 // Default version: summoner, you can ommit it
 $summonerById = $api->summoner($region, $summonerId);
-$summonerByAccount = $api->makeSummoner($region, $accountId, 'account');
+$summonerByAccount = $api->summoner($region, $accountId, 'account');
 $summonerByName = $api->summoner($region, $name, 'name');
 ```
 
@@ -118,7 +118,7 @@ $leagues = $api->league($region, $summonerId);
 ```
 
 ## Reusable requests and queries
-Examples from above (e.g. match list request with query) are shows usage of syntax sugar methods and can be rewritten as
+Examples from above (e.g., match list request with query) are shows usage of syntax sugar methods and can be rewritten as
 
 ```php
 use PYS\LolApi\ApiRequest\MatchListRequest;
