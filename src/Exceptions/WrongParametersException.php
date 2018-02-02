@@ -1,3 +1,5 @@
 <?php namespace PYS\LolApi\Exceptions;
 
-class WrongParametersException extends \Exception {}
+class WrongParametersException extends \Exception
+{
+}

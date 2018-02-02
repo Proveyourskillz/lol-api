@@ -1,3 +1,5 @@
 <?php namespace PYS\LolApi\Exceptions;
 
-class AccessDeniedException extends \Exception {}
+class AccessDeniedException extends \Exception
+{
+}

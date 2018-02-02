@@ -13,7 +13,3 @@ $another_league = $api->leaguePosition(Region::EUW, 19196451);
 
 print_r($leagues->leaguesPlayed);
 print_r($another_league->leaguesPlayed);
-
-
-
-

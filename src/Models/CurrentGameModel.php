@@ -67,5 +67,4 @@ class CurrentGameModel extends AbstractModel
      * @var int
      */
     public $gameQueueConfigId;
-
 }
