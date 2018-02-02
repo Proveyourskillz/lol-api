@@ -1,6 +1,5 @@
 <?php namespace PYS\LolApi\Models;
 
-
 class LeagueItemModel
 {
     /**

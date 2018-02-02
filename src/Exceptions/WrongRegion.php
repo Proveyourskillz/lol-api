@@ -1,3 +1,5 @@
 <?php namespace PYS\LolApi\Exceptions;
 
-class WrongRegion extends \Exception {}
+class WrongRegion extends \Exception
+{
+}
