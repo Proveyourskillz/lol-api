@@ -2,6 +2,7 @@
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use function GuzzleHttp\Psr7\build_query;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\ResponseInterface;
 
@@ -36,6 +37,14 @@ class Api
     ];
 
     /**
+     * @var string
+     */
+    private $apiKey = null;
+    /*
+     * @var callable
+     */
+    private $apiKeyCallback;
+    /**
      * @var Client
      */
     private $http;
@@ -55,11 +64,12 @@ class Api
     /**
      * Api constructor.
      *
-     * @param string $apiKey
+     * @param string|callable $apiKey
      */
-    public function __construct(string $apiKey)
+    public function __construct($apiKey)
     {
-        $this->http = $this->setupHttpClient($apiKey);
+        $this->setApiKey($apiKey);
+        $this->http = new Client;
         $this->endpointURI = new Uri('https:');
         $this->exceptionHandler = new RequestHandler;
     }
@@ -77,6 +87,8 @@ class Api
      * @throws Exceptions\RateLimitExceededException
      * @throws Exceptions\WrongParametersException
      * @throws Exceptions\WrongRequestException
+     * @throws Exceptions\WrongRegion
+     * @throws \ReflectionException
      */
     public function __call($name, $args)
     {
@@ -107,8 +119,9 @@ class Api
      * @throws Exceptions\OtherRequestException
      * @throws Exceptions\RateLimitExceededException
      * @throws Exceptions\WrongParametersException
+     * @throws \ReflectionException
      */
-    public function make(Region $region, ApiRequestInterface $apiRequest): ModelInterface
+    public function make(Region $region, ApiRequestInterface $apiRequest): ?ModelInterface
     {
         $uri = $this->getUriForRequest($apiRequest, $region);
         $options = [];
@@ -118,15 +131,17 @@ class Api
         try {
             $response = $this->http->get($uri, $options);
             $this->setRateLimits($response);
+
+            return $apiRequest
+                ->getMapper()
+                ->map(\GuzzleHttp\json_decode($response->getBody()))
+                ->wireRegion($region)
+                ->wireApi($this);
         } catch (RequestException $requestException) {
             $this->exceptionHandler->handle($requestException, $apiRequest);
         }
 
-        return $apiRequest
-            ->getMapper()
-            ->map(\GuzzleHttp\json_decode($response->getBody()))
-            ->wireRegion($region)
-            ->wireApi($this);
+        return null;
     }
 
     public function getRateLimits(): array
@@ -140,13 +155,29 @@ class Api
         return [];
     }
 
-    private function setupHttpClient(string $apiKey): Client
+    /**
+     * @return string
+     */
+    public function getApiKey(): string
     {
-        return new Client([
-            'headers' => [
-                'X-Riot-Token' => $apiKey,
-            ],
-        ]);
+        return $this->apiKey ?? ($this->apiKeyCallback)();
+    }
+
+    /**
+     * @param $apiKey
+     */
+    private function setApiKey($apiKey): void
+    {
+        if (is_string($apiKey)) {
+            $this->apiKey = $apiKey;
+            return;
+        }
+        if (is_callable($apiKey)) {
+            $this->apiKeyCallback = $apiKey;
+            return;
+        }
+
+        throw new \InvalidArgumentException('Constructor only argument must be a string or callback that return string');
     }
 
     private function setRateLimits(ResponseInterface $response): void
@@ -178,7 +209,8 @@ class Api
     {
         return $this->endpointURI
             ->withHost($region->getPlatformEndpoint())
-            ->withPath($this->buildPath($apiRequest));
+            ->withPath($this->buildPath($apiRequest))
+            ->withQuery(build_query(['api_key' => $this->getApiKey()]));
     }
 
     /**

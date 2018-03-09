@@ -98,6 +98,7 @@ final class Region
      * @param $arguments
      *
      * @return self
+     * @throws WrongRegion
      */
     public static function __callStatic($name, $arguments)
     {

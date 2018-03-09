@@ -16,6 +16,7 @@ class RequestHandler
      * @throws RateLimitExceededException
      * @throws ApiUnavailableException
      * @throws OtherRequestException
+     * @throws \ReflectionException
      */
     public function handle(RequestException $requestException, ApiRequestInterface $apiRequest): void
     {
