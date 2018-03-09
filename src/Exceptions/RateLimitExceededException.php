@@ -1,3 +1,5 @@
 <?php namespace PYS\LolApi\Exceptions;
 
-class RateLimitExceededException extends \Exception {}
+class RateLimitExceededException extends \Exception
+{
+}
