@@ -20,12 +20,12 @@ use PYS\LolApi\Models\MatchModel;
 use PYS\LolApi\Models\SummonerModel;
 
 /**
- * @method SummonerModel summoner(Region|string $region, $value, string $credential = 'summoner')
- * @method MatchModel match(Region|string $region, int $matchId, ?int $tournamentId = null)
- * @method MatchListModel matchList(Region|string $region, int $accountId, array $query = [])
- * @method LeaguePositionModel leaguePosition(Region|string $region, int $summonerId)
- * @method LeagueModel league(Region|string $region, int $summonerId)
- * @method CurrentGameModel currentGame(Region|string $region, int $summonerId)
+ * @method SummonerModel summoner(Region | string $region, $value, string $credential = 'summoner')
+ * @method MatchModel match(Region | string $region, int $matchId, ?int $tournamentId = null)
+ * @method MatchListModel matchList(Region | string $region, int $accountId, array $query = [])
+ * @method LeaguePositionModel leaguePosition(Region | string $region, int $summonerId)
+ * @method LeagueModel league(Region | string $region, int $summonerId)
+ * @method CurrentGameModel currentGame(Region | string $region, int $summonerId)
  */
 class Api
 {
@@ -35,7 +35,6 @@ class Api
         'X-App-Rate-Limit-Count' => 'app',
         'X-Method-Rate-Limit-Count' => 'method',
     ];
-
     /**
      * @var string
      */
@@ -123,13 +122,8 @@ class Api
      */
     public function make(Region $region, ApiRequestInterface $apiRequest): ?ModelInterface
     {
-        $uri = $this->getUriForRequest($apiRequest, $region);
-        $options = [];
-        if ($apiRequest instanceof ApiQueryRequestInterface) {
-            $options['query'] = $apiRequest->getQuery()->toArray();
-        }
         try {
-            $response = $this->http->get($uri, $options);
+            $response = $this->http->get($this->getUriForRequest($apiRequest, $region));
             $this->setRateLimits($response);
 
             return $apiRequest
@@ -170,10 +164,12 @@ class Api
     {
         if (is_string($apiKey)) {
             $this->apiKey = $apiKey;
+
             return;
         }
         if (is_callable($apiKey)) {
             $this->apiKeyCallback = $apiKey;
+
             return;
         }
 
@@ -207,10 +203,14 @@ class Api
 
     private function getUriForRequest(ApiRequestInterface $apiRequest, Region $region): Uri
     {
+        $queryParams = ['api_key' => $this->getApiKey()];
+        if ($apiRequest instanceof ApiQueryRequestInterface) {
+            $queryParams = array_merge($queryParams, $apiRequest->getQuery()->toArray());
+        }
         return $this->endpointURI
             ->withHost($region->getPlatformEndpoint())
             ->withPath($this->buildPath($apiRequest))
-            ->withQuery(build_query(['api_key' => $this->getApiKey()]));
+            ->withQuery(build_query($queryParams));
     }
 
     /**
